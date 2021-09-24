@@ -3,11 +3,13 @@ variable "network_id" {
 }
 
 variable "http_access_cidr_range" {
-  type = "string"
+  type    = string
+  default = "0.0.0.0/0"
 }
 
 variable "ssh_access_cidr_range" {
-  type = "string"
+  type    = string
+  default = "0.0.0.0/0"
 }
 variable "subnet_id" {
   type = string

@@ -106,17 +106,11 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
   }
 }
 
-resource "google_compute_firewall" "executor-access" {
-  name        = "${local.prefix}executor-firewall"
+resource "google_compute_firewall" "executor-http-access" {
+  name        = "${local.prefix}executor-http-firewall"
   network     = var.network_id
   target_tags = ["${local.prefix}executor"]
-  # TODO: Restrict this to strackdriver scraper only.
-  source_ranges = ["0.0.0.0/0"]
-
-  # Generally allow ICMP for pings etc.
-  allow {
-    protocol = "icmp"
-  }
+  source_ranges = [var.http_access_cidr_range]
 
   # Expose the debug server port for metrics scraping.
   allow {
@@ -124,6 +118,19 @@ resource "google_compute_firewall" "executor-access" {
     ports = [
       "6060" # Debug server
     ]
+  }
+}
+
+resource "google_compute_firewall" "executor-ssh-access" {
+  name        = "${local.prefix}executor-ssh-firewall"
+  network     = var.network_id
+  target_tags = ["${local.prefix}executor"]
+  source_ranges = [var.ssh_access_cidr_range]
+
+  # Expose the debug server port for metrics scraping.
+  allow {
+    protocol = "tcp"
+    ports = ["22"]
   }
 }
 

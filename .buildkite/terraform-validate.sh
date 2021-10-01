@@ -5,9 +5,10 @@ set -ex
 cd "$(dirname "${BASH_SOURCE[0]}")"/..
 
 MODULES=(
-  modules/docker-mirror
-  modules/executors
-  modules/networking
+  ./modules/networking
+  ./modules/docker-mirror
+  ./modules/executors
+  .
 )
 
 for module in "${MODULES[@]}"; do

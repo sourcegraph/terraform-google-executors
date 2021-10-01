@@ -10,7 +10,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
   tags = ["${local.prefix}executor"]
 
   labels = {
-    "executor_tag" = var.executor_tag
+    "executor_tag" = var.instance_tag
   }
 
   scheduling {
@@ -45,18 +45,18 @@ resource "google_compute_instance_template" "executor-instance-template" {
 
   metadata_startup_script = templatefile("${path.module}/startup-script.sh.tpl", {
     environment_variables = {
-      "EXECUTOR_DOCKER_REGISTRY_MIRROR"     = var.executor_docker_registry_mirror
+      "EXECUTOR_DOCKER_REGISTRY_MIRROR"     = var.docker_registry_mirror
       "SOURCEGRAPH_EXTERNAL_URL"            = var.sourcegraph_external_url
       "SOURCEGRAPH_EXECUTOR_PROXY_USERNAME" = var.sourcegraph_executor_proxy_username
       "SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD" = var.sourcegraph_executor_proxy_password
-      "EXECUTOR_MAXIMUM_NUM_JOBS"           = var.executor_maximum_num_jobs
-      "EXECUTOR_FIRECRACKER_NUM_CPUS"       = var.executor_firecracker_num_cpus
-      "EXECUTOR_FIRECRACKER_MEMORY"         = var.executor_firecracker_memory
-      "EXECUTOR_FIRECRACKER_DISK_SPACE"     = var.executor_firecracker_disk_space
-      "EXECUTOR_QUEUE_NAME"                 = var.executor_queue_name
-      "EXECUTOR_MAXIMUM_RUNTIME_PER_JOB"    = var.executor_maximum_runtime_per_job
-      "EXECUTOR_NUM_TOTAL_JOBS"             = var.executor_num_total_jobs
-      "EXECUTOR_MAX_ACTIVE_TIME"            = var.executor_max_active_time
+      "EXECUTOR_MAXIMUM_NUM_JOBS"           = var.maximum_num_jobs
+      "EXECUTOR_FIRECRACKER_NUM_CPUS"       = var.firecracker_num_cpus
+      "EXECUTOR_FIRECRACKER_MEMORY"         = var.firecracker_memory
+      "EXECUTOR_FIRECRACKER_DISK_SPACE"     = var.firecracker_disk_space
+      "EXECUTOR_QUEUE_NAME"                 = var.queue_name
+      "EXECUTOR_MAXIMUM_RUNTIME_PER_JOB"    = var.maximum_runtime_per_job
+      "EXECUTOR_NUM_TOTAL_JOBS"             = var.num_total_jobs
+      "EXECUTOR_MAX_ACTIVE_TIME"            = var.max_active_time
     }
   })
 
@@ -98,7 +98,7 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
     metric {
       name = "custom.googleapis.com/executors/queue/size"
       # TODO: Isn't there an AND missing here?
-      filter = "resource.type = \"global\" metric.labels.queueName = \"${var.executor_queue_name}\" AND metric.labels.environment = \"${var.metrics_environment_label}\""
+      filter = "resource.type = \"global\" metric.labels.queueName = \"${var.queue_name}\" AND metric.labels.environment = \"${var.metrics_environment_label}\""
 
       # 1 instance per N queued jobs.
       single_instance_assignment = var.jobs_per_instance_scaling
@@ -107,9 +107,9 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
 }
 
 resource "google_compute_firewall" "executor-http-access" {
-  name        = "${local.prefix}executor-http-firewall"
-  network     = var.network_id
-  target_tags = ["${local.prefix}executor"]
+  name          = "${local.prefix}executor-http-firewall"
+  network       = var.network_id
+  target_tags   = ["${local.prefix}executor"]
   source_ranges = [var.http_access_cidr_range]
 
   # Expose the debug server port for metrics scraping.
@@ -122,15 +122,15 @@ resource "google_compute_firewall" "executor-http-access" {
 }
 
 resource "google_compute_firewall" "executor-ssh-access" {
-  name        = "${local.prefix}executor-ssh-firewall"
-  network     = var.network_id
-  target_tags = ["${local.prefix}executor"]
+  name          = "${local.prefix}executor-ssh-firewall"
+  network       = var.network_id
+  target_tags   = ["${local.prefix}executor"]
   source_ranges = [var.ssh_access_cidr_range]
 
   # Expose the debug server port for metrics scraping.
   allow {
     protocol = "tcp"
-    ports = ["22"]
+    ports    = ["22"]
   }
 }
 

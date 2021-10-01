@@ -1,11 +1,11 @@
 module "gcp-networking" {
-  source = "./modules/networking/gcp"
+  source = "./modules/networking"
 
   region = var.gcp_region
 }
 
 module "gcp-docker-mirror" {
-  source = "./modules/docker-mirror/gcp"
+  source = "./modules/docker-mirror"
 
   network_id    = module.gcp-networking.network_id
   subnet_id     = module.gcp-networking.subnet_id
@@ -14,7 +14,7 @@ module "gcp-docker-mirror" {
 }
 
 module "gcp-executors" {
-  source = "./gcp"
+  source = "./modules/executors"
 
   machine_image = "projects/sourcegraph-ci/global/images/executor-a7ce591963-1631546817"
 }

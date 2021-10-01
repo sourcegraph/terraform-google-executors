@@ -23,7 +23,7 @@ module "gcp-executors" {
   zone                                = var.zone
   network_id                          = module.gcp-networking.network_id
   subnet_id                           = module.gcp-networking.subnet_id
-  resource_prefix                     = var.executor_resource_prefix
+  resource_prefix                          = var.executor_resource_prefix
   machine_image                       = var.executor_machine_image
   machine_type                        = var.executor_machine_type
   boot_disk_size                      = var.executor_boot_disk_size

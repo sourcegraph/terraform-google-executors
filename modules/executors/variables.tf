@@ -54,7 +54,7 @@ variable "ssh_access_cidr_range" {
 
 variable "http_access_cidr_range" {
   type        = string
-  default     = "10.0.0.0/16"
+  default     = "0.0.0.0/0"
   description = "CIDR range from where HTTP access to the executor instances are acceptable."
 }
 

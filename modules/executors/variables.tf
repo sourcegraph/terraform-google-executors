@@ -86,19 +86,19 @@ variable "maximum_runtime_per_job" {
 
 variable "maximum_num_jobs" {
   type        = number
-  default     = 1
+  default     = 2
   description = "The number of jobs to run concurrently per executor instance"
 }
 
 variable "num_total_jobs" {
   type        = string
-  default     = ""
+  default     = "200"
   description = "The maximum number of jobs that will be dequeued by the worker"
 }
 
 variable "max_active_time" {
   type        = string
-  default     = ""
+  default     = "2h"
   description = "The maximum time that can be spent by the worker dequeueing records to be handled"
 }
 
@@ -122,7 +122,7 @@ variable "firecracker_disk_space" {
 
 variable "min_replicas" {
   type        = number
-  default     = 1
+  default     = 0
   description = "The minimum number of executor instances to run in the autoscaling group"
 }
 

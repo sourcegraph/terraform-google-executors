@@ -1,8 +1,12 @@
+locals {
+  region     = "us-central1"
+  zone       = "us-central1-c"
+}
+
 module "executors" {
   source  = "sourcegraph/executors/google"
-  version = "0.0.6"
+  version = "0.0.7"
 
-  project_id                                   = local.project_id # REMOVE ME
   region                                       = local.region
   zone                                         = local.zone
   executor_instance_tag                        = "codeintel-prod"

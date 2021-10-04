@@ -1,6 +1,6 @@
 module "executors" {
   source  = "sourcegraph/executors/google"
-  version = "0.0.5"
+  version = "0.0.6"
 
   project_id                                   = local.project_id # REMOVE ME
   region                                       = local.region

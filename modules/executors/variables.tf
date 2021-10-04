@@ -54,7 +54,7 @@ variable "ssh_access_cidr_range" {
 
 variable "http_access_cidr_range" {
   type        = string
-  default     = "10.0.0.0/16"
+  default     = "0.0.0.0/0"
   description = "CIDR range from where HTTP access to the executor instances are acceptable."
 }
 
@@ -86,19 +86,19 @@ variable "maximum_runtime_per_job" {
 
 variable "maximum_num_jobs" {
   type        = number
-  default     = 1
+  default     = 2
   description = "The number of jobs to run concurrently per executor instance"
 }
 
 variable "num_total_jobs" {
-  type        = string
-  default     = ""
+  type        = number
+  default     = 200
   description = "The maximum number of jobs that will be dequeued by the worker"
 }
 
 variable "max_active_time" {
   type        = string
-  default     = ""
+  default     = "2h"
   description = "The maximum time that can be spent by the worker dequeueing records to be handled"
 }
 

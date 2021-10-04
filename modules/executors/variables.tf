@@ -91,7 +91,7 @@ variable "maximum_num_jobs" {
 }
 
 variable "num_total_jobs" {
-  type        = string
+  type        = number
   default     = "200"
   description = "The maximum number of jobs that will be dequeued by the worker"
 }

@@ -9,6 +9,8 @@ MODULES=(
   ./modules/docker-mirror
   ./modules/executors
   .
+  ./examples/single-executor
+  ./examples/multiple-executors
 )
 
 for module in "${MODULES[@]}"; do

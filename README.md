@@ -42,4 +42,4 @@ All of these module's variables are defined in [networking/variables.tf](./varia
 ## Requirements
 
 - [Terraform](https://www.terraform.io/) 0.13.7
-- [hashicorp/google](https://registry.terraform.io/providers/hashicorp/google/3.26.00) 3.26
+- [hashicorp/google](https://registry.terraform.io/providers/hashicorp/google/3.26.0) 3.26

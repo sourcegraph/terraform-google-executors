@@ -8,6 +8,16 @@ resource "google_service_account" "sa" {
   display_name = "${var.resource_prefix}${var.resource_prefix != "" ? " " : ""}sourcegraph executors"
 }
 
+resource "google_project_iam_member" "service_account_iam_log_writer" {
+  role   = "roles/logging.logWriter"
+  member = "serviceAccount:${google_service_account.sa.email}"
+}
+
+resource "google_project_iam_member" "service_account_iam_metric_writer" {
+  role   = "roles/monitoring.metricWriter"
+  member = "serviceAccount:${google_service_account.sa.email}"
+}
+
 resource "google_compute_instance_template" "executor-instance-template" {
   name_prefix  = "${substr(local.prefix, 0, 28)}executor-"
   machine_type = var.machine_type

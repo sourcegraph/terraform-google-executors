@@ -2,6 +2,12 @@ locals {
   prefix = var.resource_prefix != "" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
 }
 
+resource "google_service_account" "sa" {
+  # ID can be no longer than 28 characters.
+  account_id   = "${substr(local.prefix, 0, 19)}executors"
+  display_name = "${var.resource_prefix}${var.resource_prefix != "" ? " " : ""}sourcegraph executors"
+}
+
 resource "google_compute_instance_template" "executor-instance-template" {
   name_prefix  = "${substr(local.prefix, 0, 28)}executor-"
   machine_type = var.machine_type
@@ -132,33 +138,4 @@ resource "google_compute_firewall" "executor-ssh-access" {
     protocol = "tcp"
     ports    = ["22"]
   }
-}
-
-resource "google_service_account" "sa" {
-  # ID can be no longer than 28 characters.
-  account_id   = "${substr(local.prefix, 0, 19)}executors"
-  display_name = "${var.resource_prefix}${var.resource_prefix != "" ? " " : ""}sourcegraph executors"
-}
-
-# TODO(efritz) - need to make image public or otherwise grant roles/compute.imageUser to sourcegraph-ci
-# The machine image lives in sourcegraph-ci, so we need to grant access to the project
-# service account to use that image for VM creation.
-data "google_project" "sourcegraph-ci" {
-  project_id = "sourcegraph-ci"
-}
-resource "google_project_iam_member" "image-access" {
-  project = data.google_project.sourcegraph-ci.project_id
-  role    = "roles/compute.imageUser"
-  # TODO: How is that service account constructed? I was just able to get it from the UI.
-  member = "serviceAccount:42476680039@cloudservices.gserviceaccount.com"
-}
-
-resource "google_project_iam_member" "service_account_iam_log_writer" {
-  role   = "roles/logging.logWriter"
-  member = "serviceAccount:${google_service_account.sa.email}"
-}
-
-resource "google_project_iam_member" "service_account_iam_metric_writer" {
-  role   = "roles/monitoring.metricWriter"
-  member = "serviceAccount:${google_service_account.sa.email}"
 }

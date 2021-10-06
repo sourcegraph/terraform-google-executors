@@ -5,14 +5,14 @@ locals {
 
 module "networking" {
   source  = "sourcegraph/executors/google//modules/networking"
-  version = "0.0.7"
+  version = "0.0.8"
 
   region = local.region
 }
 
 module "docker-mirror" {
   source  = "sourcegraph/executors/google//modules/docker-mirror"
-  version = "0.0.7"
+  version = "0.0.8"
 
   zone       = local.zone
   network_id = module.networking.network_id
@@ -21,7 +21,7 @@ module "docker-mirror" {
 
 module "executors-codeintel" {
   source  = "sourcegraph/executors/google//modules/executors"
-  version = "0.0.7"
+  version = "0.0.8"
 
   zone                                = local.zone
   network_id                          = module.networking.network_id
@@ -39,7 +39,7 @@ module "executors-codeintel" {
 
 module "executors-batches" {
   source  = "sourcegraph/executors/google//modules/executors"
-  version = "0.0.7"
+  version = "0.0.8"
 
   zone                                = local.zone
   network_id                          = module.networking.network_id

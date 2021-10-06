@@ -5,7 +5,7 @@ locals {
 
 module "executors" {
   source  = "sourcegraph/executors/google"
-  version = "0.0.7"
+  version = "0.0.8"
 
   region                                       = local.region
   zone                                         = local.zone

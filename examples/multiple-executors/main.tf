@@ -5,14 +5,14 @@ locals {
 
 module "networking" {
   source  = "sourcegraph/executors/google//modules/networking"
-  version = "0.0.8"
+  version = "0.0.11"
 
   region = local.region
 }
 
 module "docker-mirror" {
   source  = "sourcegraph/executors/google//modules/docker-mirror"
-  version = "0.0.8"
+  version = "0.0.11"
 
   zone       = local.zone
   network_id = module.networking.network_id
@@ -21,7 +21,7 @@ module "docker-mirror" {
 
 module "executors-codeintel" {
   source  = "sourcegraph/executors/google//modules/executors"
-  version = "0.0.8"
+  version = "0.0.11"
 
   zone                                = local.zone
   network_id                          = module.networking.network_id
@@ -29,7 +29,6 @@ module "executors-codeintel" {
   resource_prefix                     = "codeintel-prod"
   instance_tag                        = "codeintel-prod"
   sourcegraph_external_url            = "https://sourcegraph.acme.com"
-  sourcegraph_executor_proxy_username = "executor"
   sourcegraph_executor_proxy_password = "hunter2"
   queue_name                          = "codeintel"
   metrics_environment_label           = "prod"
@@ -39,7 +38,7 @@ module "executors-codeintel" {
 
 module "executors-batches" {
   source  = "sourcegraph/executors/google//modules/executors"
-  version = "0.0.8"
+  version = "0.0.11"
 
   zone                                = local.zone
   network_id                          = module.networking.network_id
@@ -47,7 +46,6 @@ module "executors-batches" {
   resource_prefix                     = "batches-prod"
   instance_tag                        = "batches-prod"
   sourcegraph_external_url            = "https://sourcegraph.acme.com"
-  sourcegraph_executor_proxy_username = "executor"
   sourcegraph_executor_proxy_password = "hunter2"
   queue_name                          = "batches"
   metrics_environment_label           = "prod"

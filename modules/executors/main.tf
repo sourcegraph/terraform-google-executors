@@ -131,7 +131,7 @@ resource "google_compute_firewall" "executor-http-access" {
   allow {
     protocol = "tcp"
     ports = [
-      "6060" # Debug server
+      "9999" # exporter_exporter
     ]
   }
 }

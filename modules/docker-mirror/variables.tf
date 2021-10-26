@@ -15,7 +15,7 @@ variable "subnet_id" {
 
 variable "machine_image" {
   type        = string
-  default     = "projects/sourcegraph-ci/global/images/executor-docker-mirror-a7ce591963-1631546817"
+  default     = "projects/sourcegraph-ci/global/images/executor-docker-mirror-98fcbdf9b8-113810"
   description = "Docker registry mirror node machine disk image to use for creating the boot volume."
 }
 

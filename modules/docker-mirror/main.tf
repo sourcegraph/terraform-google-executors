@@ -4,6 +4,10 @@ resource "google_compute_instance" "default" {
   zone         = var.zone
   tags         = ["docker-registry-mirror"]
 
+  labels = {
+    "executor_tag" = "${var.instance_tag}-docker-mirror"
+  }
+
   service_account {
     email = google_service_account.sa.email
     scopes = [
@@ -28,8 +32,6 @@ resource "google_compute_instance" "default" {
       network_tier = "PREMIUM"
     }
   }
-
-  metadata_startup_script = file("${path.module}/startup-script.sh")
 }
 
 resource "google_compute_firewall" "http" {
@@ -49,6 +51,22 @@ resource "google_compute_firewall" "http" {
     protocol = "tcp"
     ports = [
       "5000"
+    ]
+  }
+}
+
+resource "google_compute_firewall" "http-metrics-access" {
+  name        = "sourcegraph-executor-docker-mirror-http-metrics"
+  network     = var.network_id
+  target_tags = ["docker-registry-mirror"]
+
+  source_ranges = [var.http_metrics_access_cidr_range]
+
+  # Expose the debug server port for metrics scraping.
+  allow {
+    protocol = "tcp"
+    ports = [
+      "9999" # exporter_exporter
     ]
   }
 }

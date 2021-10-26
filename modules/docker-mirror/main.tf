@@ -5,7 +5,7 @@ resource "google_compute_instance" "default" {
   tags         = ["docker-registry-mirror"]
 
   labels = {
-    "executor_tag" = "${var.instance_tag}-docker-mirror"
+    "executor_tag" = "${var.instance_tag_prefix}-docker-mirror"
   }
 
   service_account {

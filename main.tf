@@ -15,7 +15,7 @@ module "gcp-docker-mirror" {
   boot_disk_size         = var.docker_mirror_boot_disk_size
   ssh_access_cidr_range  = var.docker_mirror_ssh_access_cidr_range
   http_access_cidr_range = var.docker_mirror_http_access_cidr_range
-  instance_tag           = var.executor_instance_tag
+  instance_tag_prefix    = var.executor_instance_tag
 }
 
 module "gcp-executors" {

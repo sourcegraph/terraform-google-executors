@@ -27,8 +27,14 @@ variable "machine_type" {
 
 variable "boot_disk_size" {
   type        = number
-  default     = 64 // 64GB
+  default     = 32
   description = "Docker registry mirror node disk size in GB."
+}
+
+variable "disk_size" {
+  type        = number
+  default     = 64
+  description = "Persistent Docker registry mirror disk size in GB."
 }
 
 variable "ssh_access_cidr_range" {

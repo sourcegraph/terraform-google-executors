@@ -1,3 +1,16 @@
+resource "google_compute_disk" "registry-data" {
+  name = "docker-registry-data"
+  type = "pd-ssd"
+  zone = var.zone
+  size = var.disk_size
+}
+
+resource "google_compute_attached_disk" "registry-data" {
+  disk        = google_compute_disk.registry-data.id
+  instance    = google_compute_instance.default.id
+  device_name = "registry-data"
+}
+
 resource "google_compute_instance" "default" {
   name         = "sourcegraph-executors-docker-registry-mirror"
   machine_type = var.machine_type
@@ -23,6 +36,8 @@ resource "google_compute_instance" "default" {
       type  = "pd-ssd"
     }
   }
+
+  metadata_startup_script = file("${path.module}/startup-script.sh")
 
   network_interface {
     network    = var.network_id

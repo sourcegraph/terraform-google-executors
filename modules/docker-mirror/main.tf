@@ -34,7 +34,7 @@ resource "google_compute_instance" "default" {
   attached_disk {
     source      = google_compute_disk.registry-data.self_link
     device_name = "registry-data"
-    mode        = "READWRITE"
+    mode        = "READ_WRITE"
   }
 
   metadata_startup_script = file("${path.module}/startup-script.sh")

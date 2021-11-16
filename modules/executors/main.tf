@@ -19,6 +19,8 @@ resource "google_project_iam_member" "service_account_iam_metric_writer" {
 }
 
 resource "google_compute_instance_template" "executor-instance-template" {
+  # Need to use the beta provider here, some fields are otherwise not supported.
+  provider     = google-beta
   name_prefix  = "${substr(local.prefix, 0, 28)}executor-"
   machine_type = var.machine_type
 

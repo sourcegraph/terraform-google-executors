@@ -46,5 +46,5 @@ module "gcp-executors" {
   max_replicas                        = var.executor_max_replicas
   jobs_per_instance_scaling           = var.executor_jobs_per_instance_scaling
   metrics_environment_label           = var.executor_metrics_environment_label
-  docker_registry_mirror              = module.gcp-docker-mirror.ip_address
+  docker_registry_mirror              = "http://${module.gcp-docker-mirror.ip_address}:5000"
 }

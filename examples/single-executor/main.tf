@@ -18,7 +18,7 @@ provider "google" {
 
 module "executors" {
   source  = "sourcegraph/executors/google"
-  version = "0.0.16"
+  version = "0.0.18"
 
   region                                       = local.region
   zone                                         = local.zone

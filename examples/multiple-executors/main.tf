@@ -5,23 +5,24 @@ locals {
 
 module "networking" {
   source  = "sourcegraph/executors/google//modules/networking"
-  version = "0.0.11"
+  version = "0.0.16"
 
   region = local.region
 }
 
 module "docker-mirror" {
   source  = "sourcegraph/executors/google//modules/docker-mirror"
-  version = "0.0.11"
+  version = "0.0.16"
 
-  zone       = local.zone
-  network_id = module.networking.network_id
-  subnet_id  = module.networking.subnet_id
+  zone                = local.zone
+  network_id          = module.networking.network_id
+  subnet_id           = module.networking.subnet_id
+  instance_tag_prefix = "prod"
 }
 
 module "executors-codeintel" {
   source  = "sourcegraph/executors/google//modules/executors"
-  version = "0.0.11"
+  version = "0.0.16"
 
   zone                                = local.zone
   network_id                          = module.networking.network_id
@@ -35,10 +36,9 @@ module "executors-codeintel" {
   docker_registry_mirror              = "http://${module.docker-mirror.ip_address}:5000"
 }
 
-
 module "executors-batches" {
   source  = "sourcegraph/executors/google//modules/executors"
-  version = "0.0.11"
+  version = "0.0.16"
 
   zone                                = local.zone
   network_id                          = module.networking.network_id

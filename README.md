@@ -2,7 +2,7 @@
 
 This repository provides a [Terraform module](https://learn.hashicorp.com/tutorials/terraform/module-use?in=terraform/modules) to provision Sourcegraph executor compute resources on Google Cloud.
 
-![Infrastructure overview](./images/infrastructure.png)
+![Infrastructure overview](https://raw.githubusercontent.com/sourcegraph/terraform-google-executors/master/images/infrastructure.png)
 
 ## Usage examples
 

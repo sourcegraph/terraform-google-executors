@@ -1,6 +1,6 @@
 # Terraform module for Sourcegraph executors (GCP)
 
-This repository provides a [Terraform module](https://learn.hashicorp.com/tutorials/terraform/module-use?in=terraform/modules) to provision Sourcegraph executor compute resources on Google Cloud.
+This repository provides a [Terraform module](https://learn.hashicorp.com/tutorials/terraform/module-use?in=terraform/modules) to provision [Sourcegraph executor](https://docs.sourcegraph.com/admin/executors) compute resources on Google Cloud. If you are installing executors for the first time, [follow our complete setup guide](https://docs.sourcegraph.com/admin/deploy_executors).
 
 ![Infrastructure overview](https://raw.githubusercontent.com/sourcegraph/terraform-google-executors/master/images/infrastructure.png)
 

@@ -139,12 +139,13 @@ resource "google_compute_firewall" "executor-http-access" {
 }
 
 resource "google_compute_firewall" "executor-ssh-access" {
-  name          = "${local.prefix}executor-ssh-firewall"
-  network       = var.network_id
-  target_tags   = ["${local.prefix}executor"]
-  source_ranges = [var.ssh_access_cidr_range]
+  name        = "${local.prefix}executor-ssh-firewall"
+  network     = var.network_id
+  target_tags = ["${local.prefix}executor"]
 
-  # Expose the debug server port for metrics scraping.
+  # Google IAP source range.
+  source_ranges = ["35.235.240.0/20"]
+
   allow {
     protocol = "tcp"
     ports    = ["22"]

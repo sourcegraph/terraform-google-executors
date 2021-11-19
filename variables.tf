@@ -26,12 +26,6 @@ variable "docker_mirror_boot_disk_size" {
   description = "Docker registry mirror node disk size in GB"
 }
 
-variable "docker_mirror_ssh_access_cidr_range" {
-  type        = string
-  default     = "0.0.0.0/0"
-  description = "CIDR range from where SSH access to the Docker registry is acceptable."
-}
-
 variable "docker_mirror_http_access_cidr_range" {
   type        = string
   default     = "10.0.0.0/16"
@@ -71,12 +65,6 @@ variable "executor_preemptible_machines" {
 variable "executor_instance_tag" {
   type        = string
   description = "A label tag to add to all the executors; can be used for filtering out the right instances in stackdriver monitoring"
-}
-
-variable "executor_ssh_access_cidr_range" {
-  type        = string
-  default     = "0.0.0.0/0"
-  description = "CIDR range from where SSH access to the executor instances are acceptable."
 }
 
 variable "executor_http_access_cidr_range" {

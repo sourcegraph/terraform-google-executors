@@ -37,12 +37,6 @@ variable "disk_size" {
   description = "Persistent Docker registry mirror disk size in GB."
 }
 
-variable "ssh_access_cidr_range" {
-  type        = string
-  default     = "0.0.0.0/0"
-  description = "CIDR range from where SSH access to the Docker registry is acceptable."
-}
-
 variable "http_access_cidr_range" {
   type        = string
   default     = "10.0.0.0/16"

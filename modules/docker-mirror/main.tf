@@ -91,12 +91,8 @@ resource "google_compute_firewall" "ssh" {
   network     = var.network_id
   target_tags = ["docker-registry-mirror"]
 
-  source_ranges = [var.ssh_access_cidr_range]
-
-  # Generally allow ICMP for pings etc.
-  allow {
-    protocol = "icmp"
-  }
+  # Google IAP source range.
+  source_ranges = ["35.235.240.0/20"]
 
   # Expose port 22 for access to SSH.
   allow {

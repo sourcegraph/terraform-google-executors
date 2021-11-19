@@ -1,6 +1,6 @@
 module "networking" {
   source  = "sourcegraph/executors/google//modules/networking"
-  version = "0.0.17" # LATEST
+  version = "0.0.18" # LATEST
 
   region = local.region
 }

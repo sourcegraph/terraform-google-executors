@@ -22,10 +22,10 @@ get_latest() {
 
 latest="$(get_latest)"
 
-git grep --line-number "# LATEST" >want.txt
-git grep --line-number "\"$latest\" # LATEST" >got.txt
+git grep --line-number "# LATEST" examples >want.txt
+git grep --line-number "\"$latest\" # LATEST" examples >got.txt
 
-if ! git diff --no-index want.txt got.txt; then
+if ! git diff --no-index --exit-code want.txt got.txt; then
   echo ""
   echo "❌ Detected old versions! Make sure that all versions \`version = \"...\" # LATEST\` match the latest git tag: $latest"
   exit 1

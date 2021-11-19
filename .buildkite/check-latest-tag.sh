@@ -28,5 +28,5 @@ git grep --line-number "\"$latest\" # LATEST" >got.txt
 if ! git diff --no-index want.txt got.txt; then
   echo ""
   echo "❌ Detected old versions! Make sure that all versions \`version = \"...\" # LATEST\` match the latest git tag: $latest"
-  echo ""
+  exit 1
 fi

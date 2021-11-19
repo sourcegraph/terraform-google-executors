@@ -22,8 +22,8 @@ get_latest() {
 
 latest="$(get_latest)"
 
-git grep --line-number "# LATEST" > want.txt
-git grep --line-number "\"$latest\" # LATEST" > got.txt
+git grep --line-number "# LATEST" >want.txt
+git grep --line-number "\"$latest\" # LATEST" >got.txt
 
 if ! git diff --no-index want.txt got.txt; then
   echo ""

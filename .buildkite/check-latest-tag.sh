@@ -11,6 +11,8 @@ set -ex
 cd "$(dirname "${BASH_SOURCE[0]}")"/..
 
 get_latest() {
+  git fetch --tags
+
   git tag |
     # drop `v` prefix
     grep "^v" |

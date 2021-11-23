@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 scratch=$(mktemp -d -t tmp.XXXXXXXXXX)
-function finish {
+function finish() {
   rm -rf "$scratch"
 }
 trap finish EXIT

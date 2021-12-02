@@ -10,7 +10,7 @@ variable "zone" {
 
 variable "docker_mirror_machine_image" {
   type        = string
-  default     = "ubuntu-os-cloud/ubuntu-1804-bionic-v20200701"
+  default     = "projects/sourcegraph-ci/global/images/executor-docker-mirror-18d914ef3a-118088"
   description = "Docker registry mirror node machine disk image to use for creating the boot volume"
 }
 

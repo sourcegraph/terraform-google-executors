@@ -10,7 +10,7 @@ variable "zone" {
 
 variable "docker_mirror_machine_image" {
   type        = string
-  default     = "projects/sourcegraph-ci/global/images/executor-docker-mirror-4a5c5059f7-122239"
+  default     = "projects/sourcegraph-ci/global/images/executor-docker-mirror-74e72ce5cc-125891"
   description = "Docker registry mirror node machine disk image to use for creating the boot volume"
 }
 
@@ -40,7 +40,7 @@ variable "executor_resource_prefix" {
 
 variable "executor_machine_image" {
   type        = string
-  default     = "projects/sourcegraph-ci/global/images/executor-4a5c5059f7-122239"
+  default     = "projects/sourcegraph-ci/global/images/executor-74e72ce5cc-125891"
   description = "Executor node machine disk image to use for creating the boot volume"
 }
 

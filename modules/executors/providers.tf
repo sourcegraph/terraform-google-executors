@@ -5,3 +5,8 @@ terraform {
     google-beta = "~> 3.26"
   }
 }
+
+provider "google-beta" {
+  region  = var.region
+  zone    = var.zone
+}

@@ -5,7 +5,7 @@ variable "zone" {
 
 variable "region" {
   type        = string
-  description = "zone"
+  description = "region"
 }
 
 variable "network_id" {

@@ -8,3 +8,9 @@ variable "resource_prefix" {
   default     = ""
   description = "An optional prefix to add to all resources created."
 }
+
+variable "project" {
+  type        = string
+  default     = ""
+  description = "The GCP project ID."
+}

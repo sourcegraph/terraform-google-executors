@@ -137,3 +137,9 @@ variable "docker_registry_mirror" {
   default     = ""
   description = "A URL to a docker registry mirror to use (falling back to docker.io)"
 }
+
+variable "project" {
+  type        = string
+  default     = ""
+  description = "The GCP project ID."
+}

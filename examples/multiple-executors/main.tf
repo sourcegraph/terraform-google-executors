@@ -1,3 +1,6 @@
+data "google_project" "project" {
+}
+
 module "networking" {
   source  = "sourcegraph/executors/google//modules/networking"
   version = "0.0.28" # LATEST
@@ -13,6 +16,7 @@ module "docker-mirror" {
   network_id          = module.networking.network_id
   subnet_id           = module.networking.subnet_id
   instance_tag_prefix = "prod"
+  project             = data.google_project.project
 }
 
 module "executors-codeintel" {
@@ -45,4 +49,5 @@ module "executors-batches" {
   queue_name                          = "batches"
   metrics_environment_label           = "prod"
   docker_registry_mirror              = "http://${module.docker-mirror.ip_address}:5000"
+  project                             = data.google_project.project
 }

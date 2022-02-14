@@ -15,8 +15,9 @@ resource "google_project_iam_custom_role" "metric_writer" {
 }
 
 resource "google_project_iam_member" "metric_writer" {
-  role   = google_project_iam_custom_role.metric_writer.id
-  member = "serviceAccount:${google_service_account.metric_writer.email}"
+  role    = google_project_iam_custom_role.metric_writer.id
+  member  = "serviceAccount:${google_service_account.metric_writer.email}"
+  project = var.project
 }
 
 resource "google_service_account_key" "metric_writer" {
@@ -36,8 +37,9 @@ resource "google_project_iam_custom_role" "instance_scraper" {
 }
 
 resource "google_project_iam_member" "instance_scraper" {
-  role   = google_project_iam_custom_role.instance_scraper.id
-  member = "serviceAccount:${google_service_account.instance_scraper.email}"
+  role    = google_project_iam_custom_role.instance_scraper.id
+  member  = "serviceAccount:${google_service_account.instance_scraper.email}"
+  project = var.project
 }
 
 resource "google_service_account_key" "instance_scraper" {

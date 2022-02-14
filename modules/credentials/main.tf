@@ -2,9 +2,8 @@ locals {
   prefix = var.resource_prefix != "" ? "${var.resource_prefix}-sg-" : "sg-"
 }
 
-data "google_project" "project" {
-  project_id = var.project
-}
+# Fetch the google project set in the currently used provider.
+data "google_project" "project" {}
 
 resource "google_service_account" "metric_writer" {
   account_id   = "${substr(local.prefix, 0, 14)}-metric-writer"

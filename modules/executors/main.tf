@@ -2,9 +2,8 @@ locals {
   prefix = var.resource_prefix != "" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
 }
 
-data "google_project" "project" {
-  project_id = var.project
-}
+# Fetch the google project set in the currently used provider.
+data "google_project" "project" {}
 
 resource "google_service_account" "sa" {
   # ID can be no longer than 28 characters.

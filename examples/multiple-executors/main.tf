@@ -13,7 +13,6 @@ module "docker-mirror" {
   network_id          = module.networking.network_id
   subnet_id           = module.networking.subnet_id
   instance_tag_prefix = "prod"
-  project             = "sourcegraph"
 }
 
 module "executors-codeintel" {
@@ -46,5 +45,4 @@ module "executors-batches" {
   queue_name                          = "batches"
   metrics_environment_label           = "prod"
   docker_registry_mirror              = "http://${module.docker-mirror.ip_address}:5000"
-  project                             = "sourcegraph"
 }

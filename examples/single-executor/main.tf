@@ -1,6 +1,3 @@
-data "google_project" "project" {
-}
-
 module "executors" {
   source  = "sourcegraph/executors/google"
   version = "0.0.28" # LATEST
@@ -12,5 +9,5 @@ module "executors" {
   executor_sourcegraph_executor_proxy_password = "hunter2"
   executor_queue_name                          = "codeintel"
   executor_metrics_environment_label           = "prod"
-  project                                      = data.google_project.project
+  project                                      = "sourcegraph"
 }

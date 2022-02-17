@@ -1,6 +1,5 @@
-data "google_project" "project" {
-  project_id = var.project
-}
+# Fetch the google project set in the currently used provider.
+data "google_project" "project" {}
 
 resource "google_compute_disk" "registry-data" {
   name = "docker-registry-data"

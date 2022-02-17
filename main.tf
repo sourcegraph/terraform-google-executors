@@ -15,7 +15,6 @@ module "gcp-docker-mirror" {
   boot_disk_size         = var.docker_mirror_boot_disk_size
   http_access_cidr_range = var.docker_mirror_http_access_cidr_range
   instance_tag_prefix    = var.executor_instance_tag
-  project                = "sourcegraph"
 }
 
 module "gcp-executors" {
@@ -46,5 +45,4 @@ module "gcp-executors" {
   jobs_per_instance_scaling           = var.executor_jobs_per_instance_scaling
   metrics_environment_label           = var.executor_metrics_environment_label
   docker_registry_mirror              = "http://${module.gcp-docker-mirror.ip_address}:5000"
-  project                             = "sourcegraph"
 }

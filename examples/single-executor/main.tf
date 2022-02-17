@@ -9,5 +9,4 @@ module "executors" {
   executor_sourcegraph_executor_proxy_password = "hunter2"
   executor_queue_name                          = "codeintel"
   executor_metrics_environment_label           = "prod"
-  project                                      = "sourcegraph"
 }

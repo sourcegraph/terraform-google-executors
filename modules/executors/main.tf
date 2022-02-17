@@ -2,6 +2,9 @@ locals {
   prefix = var.resource_prefix != "" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
 }
 
+# Fetch the google project set in the currently used provider.
+data "google_project" "project" {}
+
 resource "google_service_account" "sa" {
   # ID can be no longer than 28 characters.
   account_id   = "${substr(local.prefix, 0, 19)}executors"
@@ -9,13 +12,15 @@ resource "google_service_account" "sa" {
 }
 
 resource "google_project_iam_member" "service_account_iam_log_writer" {
-  role   = "roles/logging.logWriter"
-  member = "serviceAccount:${google_service_account.sa.email}"
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.sa.email}"
+  project = data.google_project.project.id
 }
 
 resource "google_project_iam_member" "service_account_iam_metric_writer" {
-  role   = "roles/monitoring.metricWriter"
-  member = "serviceAccount:${google_service_account.sa.email}"
+  role    = "roles/monitoring.metricWriter"
+  member  = "serviceAccount:${google_service_account.sa.email}"
+  project = data.google_project.project.id
 }
 
 resource "google_compute_instance_template" "executor-instance-template" {

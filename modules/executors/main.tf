@@ -60,9 +60,12 @@ resource "google_compute_instance_template" "executor-instance-template" {
   network_interface {
     network    = var.network_id
     subnetwork = var.subnet_id
-    access_config {
-      # I believe this is the default.
-      network_tier = "PREMIUM"
+    dynamic "access_config" {
+      for_each = var.assign_public_ip ? [1] : []
+      content {
+        # I believe this is the default.
+        network_tier = "PREMIUM"
+      }
     }
   }
 

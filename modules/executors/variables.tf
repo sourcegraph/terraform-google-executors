@@ -47,8 +47,8 @@ variable "instance_tag" {
 }
 
 variable "http_access_cidr_range" {
-  type        = string
-  default     = "0.0.0.0/0"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
   description = "CIDR range from where HTTP access to the executor instances are acceptable."
 }
 

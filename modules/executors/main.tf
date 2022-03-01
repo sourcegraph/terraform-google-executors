@@ -135,7 +135,7 @@ resource "google_compute_firewall" "executor-http-access" {
   name          = "${local.prefix}executor-http-firewall"
   network       = var.network_id
   target_tags   = ["${local.prefix}executor"]
-  source_ranges = [var.http_access_cidr_range]
+  source_ranges = var.http_access_cidr_range
 
   # Expose the debug server port for metrics scraping.
   allow {

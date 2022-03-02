@@ -57,7 +57,7 @@ resource "google_compute_firewall" "http" {
   network     = var.network_id
   target_tags = ["docker-registry-mirror"]
 
-  source_ranges = [var.http_access_cidr_range]
+  source_ranges = var.http_access_cidr_ranges
 
   # Generally allow ICMP for pings etc.
   allow {
@@ -78,7 +78,7 @@ resource "google_compute_firewall" "http-metrics-access" {
   network     = var.network_id
   target_tags = ["docker-registry-mirror"]
 
-  source_ranges = [var.http_metrics_access_cidr_range]
+  source_ranges = var.http_metrics_access_cidr_ranges
 
   # Expose the debug server port for metrics scraping.
   allow {

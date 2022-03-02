@@ -67,7 +67,7 @@ variable "executor_instance_tag" {
   description = "A label tag to add to all the executors; can be used for filtering out the right instances in stackdriver monitoring"
 }
 
-variable "executor_http_access_cidr_range" {
+variable "executor_http_access_cidr_ranges" {
   type        = list(string)
   default     = ["0.0.0.0/0"]
   description = "CIDR range from where HTTP access to the executor instances are acceptable."

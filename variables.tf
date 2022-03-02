@@ -26,9 +26,9 @@ variable "docker_mirror_boot_disk_size" {
   description = "Docker registry mirror node disk size in GB"
 }
 
-variable "docker_mirror_http_access_cidr_range" {
-  type        = string
-  default     = "10.0.0.0/16"
+variable "docker_mirror_http_access_cidr_ranges" {
+  type        = list(string)
+  default     = ["10.0.0.0/16"]
   description = "CIDR range from where HTTP access to the Docker registry is acceptable."
 }
 

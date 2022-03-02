@@ -7,14 +7,14 @@ module "gcp-networking" {
 module "gcp-docker-mirror" {
   source = "./modules/docker-mirror"
 
-  zone                   = var.zone
-  network_id             = module.gcp-networking.network_id
-  subnet_id              = module.gcp-networking.subnet_id
-  machine_image          = var.docker_mirror_machine_image
-  machine_type           = var.docker_mirror_machine_type
-  boot_disk_size         = var.docker_mirror_boot_disk_size
-  http_access_cidr_range = var.docker_mirror_http_access_cidr_range
-  instance_tag_prefix    = var.executor_instance_tag
+  zone                    = var.zone
+  network_id              = module.gcp-networking.network_id
+  subnet_id               = module.gcp-networking.subnet_id
+  machine_image           = var.docker_mirror_machine_image
+  machine_type            = var.docker_mirror_machine_type
+  boot_disk_size          = var.docker_mirror_boot_disk_size
+  http_access_cidr_ranges = var.docker_mirror_http_access_cidr_ranges
+  instance_tag_prefix     = var.executor_instance_tag
 }
 
 module "gcp-executors" {
@@ -29,7 +29,7 @@ module "gcp-executors" {
   boot_disk_size                      = var.executor_boot_disk_size
   preemptible_machines                = var.executor_preemptible_machines
   instance_tag                        = var.executor_instance_tag
-  http_access_cidr_range              = var.executor_http_access_cidr_range
+  http_access_cidr_ranges             = var.executor_http_access_cidr_ranges
   sourcegraph_external_url            = var.executor_sourcegraph_external_url
   sourcegraph_executor_proxy_password = var.executor_sourcegraph_executor_proxy_password
   queue_name                          = var.executor_queue_name

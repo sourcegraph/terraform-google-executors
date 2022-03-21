@@ -19,7 +19,7 @@ variable "resource_prefix" {
 
 variable "machine_image" {
   type        = string
-  default     = "projects/sourcegraph-ci/global/images/executor-9e8f60444d-132322"
+  default     = "projects/sourcegraph-ci/global/images/executor-0b0eb1807b-137584"
   description = "Executor node machine disk image to use for creating the boot volume"
 }
 

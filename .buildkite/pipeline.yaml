@@ -17,3 +17,4 @@ steps:
   - command: .buildkite/ci-checkov.sh
     label: ':lock: security - checkov'    
     agents: { queue: standard }    
+    soft_fail: true

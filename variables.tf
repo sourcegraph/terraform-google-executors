@@ -40,7 +40,7 @@ variable "executor_resource_prefix" {
 
 variable "executor_machine_image" {
   type        = string
-  default     = "projects/sourcegraph-ci/global/images/executor-02727037a3-147611"
+  default     = "projects/sourcegraph-ci/global/images/executor-68fed4cc60-153155"
   description = "Executor node machine disk image to use for creating the boot volume"
 }
 
@@ -128,6 +128,12 @@ variable "executor_firecracker_disk_space" {
   type        = string
   default     = "20GB"
   description = "The amount of disk space to give to each firecracker VM"
+}
+
+variable "executor_use_firecracker" {
+  type        = bool
+  default     = true
+  description = "Whether to isolate commands in virtual machines"
 }
 
 variable "executor_min_replicas" {

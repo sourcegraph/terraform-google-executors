@@ -82,7 +82,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
       "EXECUTOR_MAXIMUM_RUNTIME_PER_JOB"    = var.maximum_runtime_per_job
       "EXECUTOR_NUM_TOTAL_JOBS"             = var.num_total_jobs
       "EXECUTOR_MAX_ACTIVE_TIME"            = var.max_active_time
-      "EXECUTOR_USE_FIRECRACKER"            = var.executor_use_firecracker
+      "EXECUTOR_USE_FIRECRACKER"            = var.use_firecracker
     }
   })
 

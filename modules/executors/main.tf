@@ -107,6 +107,12 @@ resource "google_compute_instance_group_manager" "executor" {
     minimal_action    = "REPLACE"
     type              = "PROACTIVE"
   }
+
+  lifecycle {
+    ignore_changes = [
+      target_size
+    ]
+  }
 }
 
 resource "google_compute_autoscaler" "executor-autoscaler" {

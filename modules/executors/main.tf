@@ -75,8 +75,8 @@ resource "google_compute_instance_template" "executor-instance-template" {
       "SOURCEGRAPH_EXTERNAL_URL"            = var.sourcegraph_external_url
       "SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD" = var.sourcegraph_executor_proxy_password
       "EXECUTOR_MAXIMUM_NUM_JOBS"           = var.maximum_num_jobs
-      "EXECUTOR_JOB_NUM_CPUS"               = var.executor_job_num_cpus
-      "EXECUTOR_JOB_MEMORY"                 = var.executor_job_memory
+      "EXECUTOR_JOB_NUM_CPUS"               = var.job_num_cpus
+      "EXECUTOR_JOB_MEMORY"                 = var.job_memory
       "EXECUTOR_FIRECRACKER_DISK_SPACE"     = var.firecracker_disk_space
       "EXECUTOR_QUEUE_NAME"                 = var.queue_name
       "EXECUTOR_MAXIMUM_RUNTIME_PER_JOB"    = var.maximum_runtime_per_job

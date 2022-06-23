@@ -38,7 +38,7 @@ module "gcp-executors" {
   maximum_num_jobs                    = var.executor_maximum_num_jobs
   num_total_jobs                      = var.executor_num_total_jobs
   max_active_time                     = var.executor_max_active_time
-  job_num_cpus                        = var.job_num_cpus
+  job_num_cpus                        = var.executor_job_num_cpus
   job_memory                          = var.executor_job_memory
   firecracker_disk_space              = var.executor_firecracker_disk_space
   min_replicas                        = var.executor_min_replicas

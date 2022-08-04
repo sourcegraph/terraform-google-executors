@@ -46,7 +46,7 @@ variable "http_access_cidr_ranges" {
 variable "http_metrics_access_cidr_ranges" {
   type        = list(string)
   default     = ["0.0.0.0/0"]
-  description = "CIDR range from where HTTP access to scrape metrics from the Docker registry is acceptable."
+  description = "DEPRECATED. This is not used anymore."
 }
 
 variable "instance_tag_prefix" {

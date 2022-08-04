@@ -156,6 +156,12 @@ variable "docker_registry_mirror" {
   description = "A URL to a docker registry mirror to use (falling back to docker.io)"
 }
 
+variable "docker_registry_mirror_node_exporter_url" {
+  type        = string
+  default     = ""
+  description = "A URL to a docker registry mirror node exporter to scrape (optional)"
+}
+
 variable "assign_public_ip" {
   type        = bool
   default     = true

@@ -46,12 +46,6 @@ variable "instance_tag" {
   description = "A label tag to add to all the executors; can be used for filtering out the right instances in stackdriver monitoring"
 }
 
-variable "http_access_cidr_ranges" {
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
-  description = "CIDR range from where HTTP access to the executor instances are acceptable."
-}
-
 variable "sourcegraph_external_url" {
   type        = string
   description = "The externally accessible URL of the target Sourcegraph instance"
@@ -160,10 +154,4 @@ variable "docker_registry_mirror_node_exporter_url" {
   type        = string
   default     = ""
   description = "A URL to a docker registry mirror node exporter to scrape (optional)"
-}
-
-variable "assign_public_ip" {
-  type        = bool
-  default     = true
-  description = "If false, no public IP will be associated with the executors. They cannot be scraped for metrics over the internet if this flag is false."
 }

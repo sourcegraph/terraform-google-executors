@@ -64,27 +64,11 @@ resource "google_compute_firewall" "http" {
     protocol = "icmp"
   }
 
-  # Expose the registry server port.
   allow {
     protocol = "tcp"
     ports = [
-      "5000"
-    ]
-  }
-}
-
-resource "google_compute_firewall" "http-metrics-access" {
-  name        = "sourcegraph-executor-docker-mirror-http-metrics"
-  network     = var.network_id
-  target_tags = ["docker-registry-mirror"]
-
-  source_ranges = var.http_access_cidr_ranges
-
-  # Expose the debug server port for metrics scraping.
-  allow {
-    protocol = "tcp"
-    ports = [
-      "9999" # exporter_exporter
+      "5000", # registry
+      "9999"  # exporter_exporter
     ]
   }
 }

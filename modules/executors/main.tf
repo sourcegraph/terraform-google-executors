@@ -60,13 +60,6 @@ resource "google_compute_instance_template" "executor-instance-template" {
   network_interface {
     network    = var.network_id
     subnetwork = var.subnet_id
-    dynamic "access_config" {
-      for_each = var.assign_public_ip ? [1] : []
-      content {
-        # I believe this is the default.
-        network_tier = "PREMIUM"
-      }
-    }
   }
 
   metadata_startup_script = templatefile("${path.module}/startup-script.sh.tpl", {
@@ -136,21 +129,6 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
       # 1 instance per N queued jobs.
       single_instance_assignment = var.jobs_per_instance_scaling
     }
-  }
-}
-
-resource "google_compute_firewall" "executor-http-access" {
-  name          = "${local.prefix}executor-http-firewall"
-  network       = var.network_id
-  target_tags   = ["${local.prefix}executor"]
-  source_ranges = var.http_access_cidr_ranges
-
-  # Expose the debug server port for metrics scraping.
-  allow {
-    protocol = "tcp"
-    ports = [
-      "9999" # exporter_exporter
-    ]
   }
 }
 

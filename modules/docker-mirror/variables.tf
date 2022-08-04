@@ -43,12 +43,6 @@ variable "http_access_cidr_ranges" {
   description = "CIDR range from where HTTP access to the Docker registry is acceptable."
 }
 
-variable "http_metrics_access_cidr_ranges" {
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
-  description = "DEPRECATED. This is not used anymore."
-}
-
 variable "instance_tag_prefix" {
   type        = string
   description = "A label tag to add to all the machines; can be used for filtering out the right instances in stackdriver monitoring and in Prometheus instance discovery."

@@ -5,3 +5,7 @@ output "network_id" {
 output "subnet_id" {
   value = google_compute_subnetwork.default.id
 }
+
+output "ip_cidr" {
+  value = local.ip_cidr
+}

@@ -49,7 +49,7 @@ variable "instance_tag" {
 variable "http_access_cidr_ranges" {
   type        = list(string)
   default     = ["0.0.0.0/0"]
-  description = "CIDR range from where HTTP access to the executor instances are acceptable."
+  description = "DEPRECATED. This is not used anymore."
 }
 
 variable "sourcegraph_external_url" {

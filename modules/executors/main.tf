@@ -139,21 +139,6 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
   }
 }
 
-resource "google_compute_firewall" "executor-http-access" {
-  name          = "${local.prefix}executor-http-firewall"
-  network       = var.network_id
-  target_tags   = ["${local.prefix}executor"]
-  source_ranges = var.http_access_cidr_ranges
-
-  # Expose the debug server port for metrics scraping.
-  allow {
-    protocol = "tcp"
-    ports = [
-      "9999" # exporter_exporter
-    ]
-  }
-}
-
 resource "google_compute_firewall" "executor-ssh-access" {
   name        = "${local.prefix}executor-ssh-firewall"
   network     = var.network_id

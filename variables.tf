@@ -29,7 +29,7 @@ variable "docker_mirror_boot_disk_size" {
 variable "docker_mirror_http_access_cidr_ranges" {
   type        = list(string)
   default     = ["10.0.0.0/16"]
-  description = "CIDR range from where HTTP access to the Docker registry is acceptable."
+  description = "DEPRECATED. This is not used anymore."
 }
 
 variable "executor_resource_prefix" {
@@ -70,7 +70,7 @@ variable "executor_instance_tag" {
 variable "executor_http_access_cidr_ranges" {
   type        = list(string)
   default     = ["0.0.0.0/0"]
-  description = "CIDR range from where HTTP access to the executor instances are acceptable."
+  description = "DEPRECATED. This is not used anymore."
 }
 
 variable "executor_sourcegraph_external_url" {

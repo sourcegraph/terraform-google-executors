@@ -26,6 +26,12 @@ variable "docker_mirror_boot_disk_size" {
   description = "Docker registry mirror node disk size in GB"
 }
 
+variable "docker_mirror_http_access_cidr_ranges" {
+  type        = list(string)
+  default     = ["10.0.0.0/16"]
+  description = "DEPRECATED. This is not used anymore."
+}
+
 variable "executor_resource_prefix" {
   type        = string
   default     = ""
@@ -59,6 +65,12 @@ variable "executor_preemptible_machines" {
 variable "executor_instance_tag" {
   type        = string
   description = "A label tag to add to all the executors; can be used for filtering out the right instances in stackdriver monitoring"
+}
+
+variable "executor_http_access_cidr_ranges" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "DEPRECATED. This is not used anymore."
 }
 
 variable "executor_sourcegraph_external_url" {

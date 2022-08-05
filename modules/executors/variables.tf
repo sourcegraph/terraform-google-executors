@@ -165,5 +165,5 @@ variable "docker_registry_mirror_node_exporter_url" {
 variable "assign_public_ip" {
   type        = bool
   default     = true
-  description = "If false, no public IP will be associated with the executors. They cannot be scraped for metrics over the internet if this flag is false."
+  description = "If false, no public IP will be associated with the executors."
 }

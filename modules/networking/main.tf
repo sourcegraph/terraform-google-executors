@@ -46,5 +46,5 @@ resource "google_compute_router_nat" "default" {
     enable = true
     filter = "ERRORS_ONLY"
   }
-  min_ports_per_vm = 1024
+  min_ports_per_vm = var.nat_min_ports_per_vm
 }

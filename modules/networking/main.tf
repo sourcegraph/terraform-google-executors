@@ -16,7 +16,7 @@ resource "google_compute_subnetwork" "default" {
   region        = var.region
 }
 
-# Then NAT mode is enabled, we create a custom router for our network.
+# If NAT mode is enabled, we create a custom router for our network.
 resource "google_compute_router" "default" {
   count = var.nat ? 1 : 0
 

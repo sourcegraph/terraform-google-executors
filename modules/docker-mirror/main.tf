@@ -46,8 +46,12 @@ resource "google_compute_instance" "default" {
     network    = var.network_id
     network_ip = google_compute_address.static.address
     subnetwork = var.subnet_id
-    access_config {
-      network_tier = "PREMIUM"
+    dynamic "access_config" {
+      for_each = var.assign_public_ip ? [1] : []
+      content {
+        # I believe this is the default.
+        network_tier = "PREMIUM"
+      }
     }
   }
 }

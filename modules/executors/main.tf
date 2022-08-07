@@ -23,6 +23,11 @@ resource "google_project_iam_member" "service_account_iam_metric_writer" {
   project = data.google_project.project.id
 }
 
+data "google_compute_image" "executor_image" {
+  project = "sourcegraph-ci"
+  family  = "sourcegraph-executors-3-42"
+}
+
 resource "google_compute_instance_template" "executor-instance-template" {
   # Need to use the beta provider here, some fields are otherwise not supported.
   provider     = google-beta
@@ -51,7 +56,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
   }
 
   disk {
-    source_image = var.machine_image
+    source_image = var.machine_image != "" ? var.machine_image : data.google_compute_image.executor_image.self_link
     disk_size_gb = var.boot_disk_size
     boot         = true
     disk_type    = "pd-ssd"

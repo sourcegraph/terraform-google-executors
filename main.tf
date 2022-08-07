@@ -2,6 +2,7 @@ module "gcp-networking" {
   source = "./modules/networking"
 
   region = var.region
+  nat    = var.private_networking
 }
 
 module "gcp-docker-mirror" {
@@ -15,6 +16,7 @@ module "gcp-docker-mirror" {
   machine_type            = var.docker_mirror_machine_type
   boot_disk_size          = var.docker_mirror_boot_disk_size
   instance_tag_prefix     = var.executor_instance_tag
+  assign_public_ip        = var.private_networking ? false : true
 }
 
 module "gcp-executors" {
@@ -46,4 +48,5 @@ module "gcp-executors" {
   metrics_environment_label                = var.executor_metrics_environment_label
   docker_registry_mirror                   = "http://${module.gcp-docker-mirror.ip_address}:5000"
   docker_registry_mirror_node_exporter_url = "http://${module.gcp-docker-mirror.ip_address}:9999"
+  assign_public_ip                         = var.private_networking ? false : true
 }

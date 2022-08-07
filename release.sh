@@ -4,6 +4,42 @@ set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
+get_latest() {
+  git fetch
+
+  git tag |
+    # drop `v` prefix
+    grep "^v" |
+    cut -c2- |
+
+    # sort by semantic version
+    sort -t "." -k1,1n -k2,2n -k3,3n |
+
+    # last
+    tail -n 1 |
+
+    # drop newline
+    tr -d '\n'
+}
+
+NEW="$1"
+
+if [ -z "$NEW" ]; then
+  echo "Usage  : bash release.sh <version>"
+  echo "Example: bash release.sh 1.2.3"
+  echo ""
+  echo "Fetching tags..."
+  latest="$(get_latest)"
+  echo -n "The current version is: $latest"
+
+  exit 1
+fi
+
+if [[ "$NEW" == v* ]]; then
+  echo "<version> must not start with \"v\""
+  exit 1
+fi
+
 echo "Checking for clean working tree..."
 if [[ "$(git diff --stat)" != "" ]]; then
   echo "❌ Dirty working tree (try git stash)"
@@ -26,11 +62,9 @@ fi
 git ls-tree -r HEAD --name-only -z examples | xargs -0 sed -i.sedbak "s/\"[0-9]*\.[0-9]*\.[0-9]*\" # LATEST/\"$NEW\" # LATEST/g"
 find . -name "*.sedbak" -print0 | xargs -0 rm
 
-# Patch the image source. TODO: This has to write $MAJOR-$MINOR and not $NEW.
-sed -i '' "s/\"sourcegraph-executors-docker-mirror-[0-9][0-9]*-[0-9][0-9]*\"/\"sourcegraph-executors-docker-mirror-$NEW\"/g" modules/docker-mirror/main.tf
-sed -i '' "s/\"sourcegraph-executors-[0-9][0-9]*-[0-9][0-9]*\"/\"sourcegraph-executors-$NEW\"/g" modules/executors/main.tf
-
-git commit --all --message "Release module version $NEW"
+git commit --all --message "release $NEW"
+git tag "v$NEW"
+git push --tags
 git push
 
 echo ""

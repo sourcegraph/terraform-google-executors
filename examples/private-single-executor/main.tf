@@ -10,5 +10,5 @@ module "executors" {
   executor_queue_name                          = "codeintel"
   executor_metrics_environment_label           = "prod"
   executor_use_firecracker                     = true
-  private_networking                           = true
+  #   private_networking                           = true
 }

@@ -14,7 +14,7 @@ DOCKER_REGISTRY_NODE_EXPORTER_URL_LINE=''
 # files to copy into the VMs.
 if [ "$${EXECUTOR_DOCKER_REGISTRY_MIRROR}" != '' ]; then
   echo "$${EXECUTOR_DOCKER_REGISTRY_MIRROR}" >/docker-registry.txt
-  yq -i '.spec.vmDefaults.copyFiles[0].hostPath = "/docker-registry.txt" | .spec.vmDefaults.copyFiles[0].vmPath = "/docker-registry.txt"' /etc/ignite/config.yaml
+  yq e -i '.spec.vmDefaults.copyFiles[0].hostPath = "/docker-registry.txt" | .spec.vmDefaults.copyFiles[0].vmPath = "/docker-registry.txt"' /etc/ignite/config.yaml
 
   # Allow access to the docker registry from the VM.
   IP=$(echo $${EXECUTOR_DOCKER_REGISTRY_MIRROR} | grep -oE '//(.*?):' | sed 's/[\/:]//g')

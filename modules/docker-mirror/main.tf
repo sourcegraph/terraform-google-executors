@@ -10,7 +10,7 @@ resource "google_compute_disk" "registry-data" {
 
 data "google_compute_image" "mirror_image" {
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-docker-mirror-3-42"
+  family  = "sourcegraph-executors-docker-mirror-3-43"
 }
 
 resource "google_compute_instance" "default" {

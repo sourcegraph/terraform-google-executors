@@ -9,6 +9,7 @@ resource "google_compute_disk" "registry-data" {
 }
 
 data "google_compute_image" "mirror_image" {
+  count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
   family  = "sourcegraph-executors-docker-mirror-3-43"
 }
@@ -33,7 +34,7 @@ resource "google_compute_instance" "default" {
 
   boot_disk {
     initialize_params {
-      image = var.machine_image != "" ? var.machine_image : data.google_compute_image.mirror_image.self_link
+      image = var.machine_image != "" ? var.machine_image : data.google_compute_image.mirror_image.0.self_link
       size  = var.boot_disk_size
       type  = "pd-ssd"
     }

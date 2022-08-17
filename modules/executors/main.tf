@@ -24,6 +24,7 @@ resource "google_project_iam_member" "service_account_iam_metric_writer" {
 }
 
 data "google_compute_image" "executor_image" {
+  count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
   family  = "sourcegraph-executors-3-43"
 }
@@ -56,7 +57,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
   }
 
   disk {
-    source_image = var.machine_image != "" ? var.machine_image : data.google_compute_image.executor_image.self_link
+    source_image = var.machine_image != "" ? var.machine_image : data.google_compute_image.executor_image.0.self_link
     disk_size_gb = var.boot_disk_size
     boot         = true
     disk_type    = "pd-ssd"

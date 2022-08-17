@@ -25,7 +25,7 @@ resource "google_project_iam_member" "service_account_iam_metric_writer" {
 
 data "google_compute_image" "executor_image" {
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-3-42"
+  family  = "sourcegraph-executors-3-43"
 }
 
 resource "google_compute_instance_template" "executor-instance-template" {

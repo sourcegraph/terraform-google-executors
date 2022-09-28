@@ -11,7 +11,7 @@ module "gcp-docker-mirror" {
   zone                    = var.zone
   network_id              = module.gcp-networking.network_id
   subnet_id               = module.gcp-networking.subnet_id
-  http_access_cidr_ranges = module.gcp-networking.ip_cidr
+  http_access_cidr_ranges = [module.gcp-networking.ip_cidr]
   machine_image           = var.docker_mirror_machine_image
   machine_type            = var.docker_mirror_machine_type
   boot_disk_size          = var.docker_mirror_boot_disk_size

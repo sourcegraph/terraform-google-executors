@@ -9,10 +9,13 @@ ${key}="${value}"
 # Conditionally set below
 DOCKER_REGISTRY_NODE_EXPORTER_URL_LINE=''
 
+export EXECUTOR_DOCKER_REGISTRY_MIRROR_URL="https://mirror.gcr.io"
+
 # If a docker registry mirror is configured, create a startup script
 # that will configure docker to use the mirror. This requires writing
 # a docker configuration file and restarting the service.
 if [ "$${EXECUTOR_DOCKER_REGISTRY_MIRROR}" != '' ]; then
+  EXECUTOR_DOCKER_REGISTRY_MIRROR_URL="https://mirror.gcr.io,$${EXECUTOR_DOCKER_REGISTRY_MIRROR}"
   # Allow access to the docker registry from the VM.
   IP=$(echo $${EXECUTOR_DOCKER_REGISTRY_MIRROR} | grep -oE '//(.*?):' | sed 's/[\/:]//g')
   PORT=$(echo $${EXECUTOR_DOCKER_REGISTRY_MIRROR} | grep -oE "(:[0-9]{1,6})" | sed 's/://g')
@@ -40,7 +43,7 @@ EXECUTOR_FRONTEND_PASSWORD="$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD}"
 EXECUTOR_NUM_TOTAL_JOBS="$${EXECUTOR_NUM_TOTAL_JOBS}"
 EXECUTOR_MAX_ACTIVE_TIME="$${EXECUTOR_MAX_ACTIVE_TIME}"
 EXECUTOR_USE_FIRECRACKER="$${EXECUTOR_USE_FIRECRACKER}"
-EXECUTOR_DOCKER_REGISTRY_MIRROR_URL="$${EXECUTOR_DOCKER_REGISTRY_MIRROR}"
+EXECUTOR_DOCKER_REGISTRY_MIRROR_URL="$${EXECUTOR_DOCKER_REGISTRY_MIRROR_URL}"
 $${DOCKER_REGISTRY_NODE_EXPORTER_URL_LINE}
 EOF
 

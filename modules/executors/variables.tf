@@ -1,14 +1,16 @@
 variable "zone" {
   type        = string
-  description = "zone"
+  description = "The Google zone to provision the Executor compute resources in."
 }
 
 variable "network_id" {
-  type = string
+  type        = string
+  description = "The network to run the VM in."
 }
 
 variable "subnet_id" {
-  type = string
+  type        = string
+  description = "The subnet to run the VM in."
 }
 
 variable "resource_prefix" {

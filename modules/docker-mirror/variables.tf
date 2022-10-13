@@ -59,3 +59,15 @@ variable "assign_public_ip" {
   default     = true
   description = "If false, no public IP will be associated with the executors."
 }
+
+variable "resource_prefix" {
+  type        = string
+  description = "A string to prefix all resources with"
+  default     = "src-"
+}
+
+variable "labels" {
+  type        = map(string)
+  description = "A map of labels to add to all resources"
+  default     = {}
+}

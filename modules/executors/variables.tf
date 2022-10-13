@@ -13,7 +13,7 @@ variable "subnet_id" {
 
 variable "resource_prefix" {
   type        = string
-  default     = ""
+  default     = "src-"
   description = "An optional prefix to add to all resources created."
 }
 
@@ -166,4 +166,10 @@ variable "assign_public_ip" {
   type        = bool
   default     = true
   description = "If false, no public IP will be associated with the executors."
+}
+
+variable "labels" {
+  type        = map(string)
+  description = "A map of labels to add to all resources"
+  default     = {}
 }

@@ -1,11 +1,23 @@
+locals {
+  network_tags = [
+    substr("${random_id.compute_instance_network_tag.hex}-docker-mirror", 0, 64),
+    "docker-mirror"
+  ]
+}
+
 # Fetch the google project set in the currently used provider.
 data "google_project" "project" {}
 
+resource "random_id" "compute_disk_registry_data" {
+  prefix      = var.resource_prefix
+  byte_length = 6
+}
 resource "google_compute_disk" "registry-data" {
-  name = "docker-registry-data"
-  type = "pd-ssd"
-  zone = var.zone
-  size = var.disk_size
+  name   = "${random_id.compute_disk_registry_data.hex}-docker-mirror"
+  type   = "pd-ssd"
+  zone   = var.zone
+  size   = var.disk_size
+  labels = var.labels
 }
 
 data "google_compute_image" "mirror_image" {
@@ -14,15 +26,22 @@ data "google_compute_image" "mirror_image" {
   family  = "sourcegraph-executors-docker-mirror-4-0"
 }
 
+resource "random_id" "compute_instance_default" {
+  prefix      = var.resource_prefix
+  byte_length = 6
+}
 resource "google_compute_instance" "default" {
-  name         = "sourcegraph-executors-docker-registry-mirror"
+  name         = "${random_id.compute_instance_default.hex}-docker-mirror"
   machine_type = var.machine_type
   zone         = var.zone
-  tags         = ["docker-registry-mirror"]
+  tags         = local.network_tags
 
-  labels = {
-    "executor_tag" = "${var.instance_tag_prefix}-docker-mirror"
-  }
+  labels = merge(
+    {
+      "executor_tag" = "${var.instance_tag_prefix}-docker-mirror"
+    },
+    var.labels,
+  )
 
   service_account {
     email = google_service_account.sa.email
@@ -62,10 +81,19 @@ resource "google_compute_instance" "default" {
   }
 }
 
+resource "random_id" "compute_instance_network_tag" {
+  prefix      = var.resource_prefix
+  byte_length = 4
+}
+resource "random_id" "firewall_rule_prefix" {
+  prefix      = var.resource_prefix
+  byte_length = 4
+}
+
 resource "google_compute_firewall" "http" {
-  name        = "sourcegraph-executor-docker-mirror-http"
+  name        = "${random_id.firewall_rule_prefix.hex}-docker-mirror-http"
   network     = var.network_id
-  target_tags = ["docker-registry-mirror"]
+  target_tags = local.network_tags
 
   source_ranges = var.http_access_cidr_ranges
 
@@ -84,9 +112,9 @@ resource "google_compute_firewall" "http" {
 }
 
 resource "google_compute_firewall" "ssh" {
-  name        = "sourcegraph-executor-docker-mirror-ssh"
+  name        = "${random_id.firewall_rule_prefix.hex}-docker-mirror-ssh"
   network     = var.network_id
-  target_tags = ["docker-registry-mirror"]
+  target_tags = local.network_tags
 
   # Google IAP source range.
   source_ranges = ["35.235.240.0/20"]
@@ -100,14 +128,23 @@ resource "google_compute_firewall" "ssh" {
   }
 }
 
+resource "random_id" "compute_address_static" {
+  prefix      = var.resource_prefix
+  byte_length = 6
+}
+
 resource "google_compute_address" "static" {
   address_type = "INTERNAL"
   subnetwork   = var.subnet_id
-  name         = "sg-executor-docker-registry-mirror"
+  name         = random_id.compute_address_static.hex
 }
 
+resource "random_id" "service_account" {
+  prefix      = var.resource_prefix
+  byte_length = 4
+}
 resource "google_service_account" "sa" {
-  account_id   = "sg-executor-docker-registry"
+  account_id   = substr("${random_id.service_account.hex}-docker-mirror", 0, 30)
   display_name = "Docker registry mirror for Sourcegraph executors"
 }
 

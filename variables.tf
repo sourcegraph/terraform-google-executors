@@ -1,11 +1,11 @@
 variable "region" {
   type        = string
-  description = "region"
+  description = "The GCP region to provision the executor resources in."
 }
 
 variable "zone" {
   type        = string
-  description = "zone"
+  description = "The Google zone to provision the executor resources in."
 }
 
 variable "docker_mirror_machine_image" {

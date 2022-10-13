@@ -25,6 +25,11 @@ The [single-executor example](https://github.com/sourcegraph/terraform-google-ex
 - [Terraform](https://www.terraform.io/) ~> 1.1.0
 - [hashicorp/google](https://registry.terraform.io/providers/hashicorp/google) `>= 3.26, < 5.0`
 
+## Setup
+
+Please follow our [setup guide](https://docs.sourcegraph.com/admin/deploy_executors_terraform) on how to deploy
+executors using Terraform.
+
 ## Compatibility with Sourcegraph
 
 The **major** and **minor** versions both need to match the Sourcegraph version the executors are talking to. Patch version **don't** need to match and it's generally advised to use the latest available.

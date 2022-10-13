@@ -1,8 +1,3 @@
-variable "region" {
-  type        = string
-  description = "region"
-}
-
 variable "resource_prefix" {
   type        = string
   default     = ""

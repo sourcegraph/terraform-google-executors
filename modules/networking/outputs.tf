@@ -10,7 +10,7 @@ output "subnet_id" {
 
 output "ip_cidr" {
   value       = local.ip_cidr
-  description = "The internal address that is owned by the subnetwork."
+  description = "The CIDR range of the subnet in which the executor machines will be spawned."
 }
 
 output "nat_ip" {

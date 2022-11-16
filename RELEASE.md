@@ -11,6 +11,11 @@ At the moment, the release process is a manual process.
 5. Open the PR
 6. At the moment, Buildkite will fail because the new version does not actually exist yet. So, a force merge is required.
 
+## Merging PR
+
+1. Once PR is merged, pull the latest `master` locally (since we will be creating a tag locally)
+  - `git checkout master && git pull`
+
 ## Create Tag
 
 1. Create a tag matching the new version (e.g. `v4.2.0`).
@@ -20,6 +25,6 @@ At the moment, the release process is a manual process.
 
 ## CI
 
-1. Go to Buildkite and find the build for the tag.
+1. Go to Buildkite and find the build for the tag and the main commit.
 2. Wait for build to complete.
    - If build failed, rerun (the Terraform Registry may lag behind causing build to fail)

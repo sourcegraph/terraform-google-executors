@@ -17,7 +17,7 @@ The [multiple-executors example](https://github.com/sourcegraph/terraform-google
 
 This repository also provides a [root module](https://registry.terraform.io/modules/sourcegraph/executors/google/4.2.0) combining the executors, network, and docker-mirror resources into an easier to use package.
 
-The [single-executor example](https://github.com/sourcegraph/terraform-google-executors/blob/v4.1.0/examples/single-executor) uses the root module to provision a single executor type. Follow this example if you are deploying to a single Sourcegraph instance and using a single executors-backed feature.
+The [single-executor example](https://github.com/sourcegraph/terraform-google-executors/blob/v4.2.0/examples/single-executor) uses the root module to provision a single executor type. Follow this example if you are deploying to a single Sourcegraph instance and using a single executors-backed feature.
 
 ## Requirements
 

@@ -11,7 +11,7 @@ resource "google_compute_disk" "registry-data" {
 data "google_compute_image" "mirror_image" {
   count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-docker-mirror-4-2"
+  family  = "sourcegraph-executors-docker-mirror-4-3"
 }
 
 resource "google_compute_instance" "default" {

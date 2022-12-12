@@ -49,4 +49,5 @@ module "gcp-executors" {
   docker_registry_mirror                   = "http://${module.gcp-docker-mirror.ip_address}:5000"
   docker_registry_mirror_node_exporter_url = "http://${module.gcp-docker-mirror.ip_address}:9999"
   assign_public_ip                         = var.private_networking ? false : true
+  docker_auth_config                       = var.executor_docker_auth_config
 }

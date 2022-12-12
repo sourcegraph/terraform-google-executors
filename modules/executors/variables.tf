@@ -169,3 +169,9 @@ variable "assign_public_ip" {
   default     = true
   description = "If false, no public IP will be associated with the executors."
 }
+
+variable "docker_auth_config" {
+  type        = string
+  default     = ""
+  description = "If provided, this docker auth config file will be used to authorize image pulls. See [Using private registries](https://docs.sourcegraph.com/admin/deploy_executors#using-private-registries) for how to configure."
+}

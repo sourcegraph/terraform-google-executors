@@ -36,7 +36,7 @@ Once the Pull Request has been merged, run `release.sh`.
 1. Create a tag matching the new version (e.g. `v4.2.0`).
    - `git tag "vX.X.X"` (replace `X` with the versions)
 2. Push the tag to remote.
-  - `git push --tags`
+   - `git push --tags`
 
 ### CI
 

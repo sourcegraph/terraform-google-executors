@@ -68,6 +68,6 @@ variable "resource_prefix" {
 
 variable "labels" {
   type        = map(string)
-  description = "A map of labels to add to all resources"
+  description = "A map of labels to add to compute disks and instances"
   default     = {}
 }

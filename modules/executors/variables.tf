@@ -1,14 +1,16 @@
 variable "zone" {
   type        = string
-  description = "zone"
+  description = "The Google zone to provision the Executor compute resources in."
 }
 
 variable "network_id" {
-  type = string
+  type        = string
+  description = "The network to run the VM in."
 }
 
 variable "subnet_id" {
-  type = string
+  type        = string
+  description = "The subnet to run the VM in."
 }
 
 variable "resource_prefix" {
@@ -168,8 +170,14 @@ variable "assign_public_ip" {
   description = "If false, no public IP will be associated with the executors."
 }
 
+variable "docker_auth_config" {
+  type        = string
+  default     = ""
+  description = "If provided, this docker auth config file will be used to authorize image pulls. See [Using private registries](https://docs.sourcegraph.com/admin/deploy_executors#using-private-registries) for how to configure."
+}
+
 variable "labels" {
   type        = map(string)
-  description = "A map of labels to add to all resources"
+  description = "A map of labels to add to compute instances"
   default     = {}
 }

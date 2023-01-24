@@ -23,7 +23,7 @@ resource "google_compute_disk" "registry-data" {
 data "google_compute_image" "mirror_image" {
   count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-docker-mirror-4-0"
+  family  = "sourcegraph-executors-docker-mirror-4-4"
 }
 
 resource "random_id" "compute_instance_default" {

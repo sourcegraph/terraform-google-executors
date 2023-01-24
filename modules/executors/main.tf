@@ -33,7 +33,7 @@ resource "google_project_iam_member" "service_account_iam_metric_writer" {
 data "google_compute_image" "executor_image" {
   count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-4-0"
+  family  = "sourcegraph-executors-4-4"
 }
 
 resource "random_id" "compute_instance_network_tag" {
@@ -103,6 +103,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
       "EXECUTOR_NUM_TOTAL_JOBS"             = var.num_total_jobs
       "EXECUTOR_MAX_ACTIVE_TIME"            = var.max_active_time
       "EXECUTOR_USE_FIRECRACKER"            = var.use_firecracker
+      "EXECUTOR_DOCKER_AUTH_CONFIG"         = var.docker_auth_config
     }
   })
 

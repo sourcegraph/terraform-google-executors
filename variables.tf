@@ -1,11 +1,11 @@
 variable "region" {
   type        = string
-  description = "region"
+  description = "The GCP region to provision the executor resources in."
 }
 
 variable "zone" {
   type        = string
-  description = "zone"
+  description = "The Google zone to provision the executor resources in."
 }
 
 variable "docker_mirror_machine_image" {
@@ -175,4 +175,10 @@ variable "private_networking" {
   type        = bool
   default     = false
   description = "If true, the executors and docker mirror will live in a private subnet and communicate with the internet through NAT."
+}
+
+variable "executor_docker_auth_config" {
+  type        = string
+  default     = ""
+  description = "If provided, this docker auth config file will be used to authorize image pulls. See [Using private registries](https://docs.sourcegraph.com/admin/deploy_executors#using-private-registries) for how to configure."
 }

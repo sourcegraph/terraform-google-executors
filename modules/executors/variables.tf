@@ -15,7 +15,7 @@ variable "subnet_id" {
 
 variable "resource_prefix" {
   type        = string
-  default     = "src-"
+  default     = ""
   description = "An optional prefix to add to all resources created."
 }
 

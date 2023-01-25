@@ -17,6 +17,12 @@ variable "nat_min_ports_per_vm" {
 
 variable "resource_prefix" {
   type        = string
-  default     = "src-"
+  default     = ""
   description = "An optional prefix to add to all resources created."
+}
+
+variable "randomize_resource_names" {
+  type    = bool
+  default = false
+  description = "Use randomized names for resources. Disable if you are upgrading existing executors that were deployed using the legacy naming conventions."
 }

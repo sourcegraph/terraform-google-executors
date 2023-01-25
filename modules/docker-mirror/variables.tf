@@ -71,3 +71,9 @@ variable "labels" {
   description = "A map of labels to add to compute disks and instances"
   default     = {}
 }
+
+variable "randomize_resource_names" {
+  type    = bool
+  default = false
+  description = "Use randomized names for resources. Disable if you are upgrading existing executors that were deployed using the legacy naming conventions."
+}

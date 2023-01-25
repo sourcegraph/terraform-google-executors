@@ -136,7 +136,7 @@ resource "random_id" "compute_address_static" {
 resource "google_compute_address" "static" {
   address_type = "INTERNAL"
   subnetwork   = var.subnet_id
-  name         = random_id.compute_address_static.hex
+  name         = "${random_id.compute_address_static.hex}-docker-mirror"
 }
 
 resource "random_id" "service_account" {

@@ -1,8 +1,8 @@
 locals {
-  network_tags = [
+  network_tags = var.randomize_resource_names ? [
     substr("${random_id.compute_instance_network_tag[0].hex}-docker-mirror", 0, 64),
     "docker-mirror"
-  ]
+  ] : []
 
   resource_values = {
     compute_disk = {
@@ -162,6 +162,7 @@ resource "google_compute_address" "static" {
 }
 
 resource "random_id" "service_account" {
+  count       = var.randomize_resource_names ? 1 : 0
   prefix      = var.resource_prefix
   byte_length = 4
 }

@@ -63,7 +63,7 @@ resource "google_compute_instance" "default" {
   labels = local.resource_values.compute_instance.labels
 
   service_account {
-    email  = google_service_account.sa.email
+    email = google_service_account.sa.email
     scopes = [
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring.write",
@@ -125,7 +125,7 @@ resource "google_compute_firewall" "http" {
 
   allow {
     protocol = "tcp"
-    ports    = [
+    ports = [
       "5000", # registry
       "9999"  # exporter_exporter
     ]
@@ -143,7 +143,7 @@ resource "google_compute_firewall" "ssh" {
   # Expose port 22 for access to SSH.
   allow {
     protocol = "tcp"
-    ports    = [
+    ports = [
       "22"
     ]
   }

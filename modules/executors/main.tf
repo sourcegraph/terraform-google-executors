@@ -86,7 +86,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
 
   # Grant access to logging and monitoring APIs.
   service_account {
-    email  = google_service_account.sa.email
+    email = google_service_account.sa.email
     scopes = [
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring.write",
@@ -178,7 +178,7 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
     cooldown_period = 300
 
     metric {
-      name   = "custom.googleapis.com/executors/queue/size"
+      name = "custom.googleapis.com/executors/queue/size"
       # TODO: Isn't there an AND missing here?
       filter = "resource.type = \"global\" metric.labels.queueName = \"${var.queue_name}\" AND metric.labels.environment = \"${var.metrics_environment_label}\""
 

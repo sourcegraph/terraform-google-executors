@@ -23,6 +23,5 @@ variable "resource_prefix" {
 
 variable "randomize_resource_names" {
   type    = bool
-  default = false
   description = "Use randomized names for resources. Disable if you are upgrading existing executors that were deployed using the legacy naming conventions."
 }

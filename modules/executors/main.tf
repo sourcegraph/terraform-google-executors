@@ -15,7 +15,7 @@ resource "random_id" "service_account" {
 }
 resource "google_service_account" "sa" {
   account_id   = substr("${random_id.service_account.hex}-executors", 0, 30)
-  display_name = "Serivce account for Sourcegraph executors"
+  display_name = "Service account for Sourcegraph executors"
 }
 
 resource "google_project_iam_member" "service_account_iam_log_writer" {

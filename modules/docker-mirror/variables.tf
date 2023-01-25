@@ -63,7 +63,7 @@ variable "assign_public_ip" {
 variable "resource_prefix" {
   type        = string
   description = "A string to prefix all resources with"
-  default     = "src-"
+  default     = ""
 }
 
 variable "labels" {

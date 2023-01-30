@@ -1,4 +1,7 @@
 locals {
+  // can't set a default for resource_prefix as it potentially breaks legacy deployments that didn't set a prefix
+  prefix = var.randomize_resource_names ? (var.resource_prefix == "" ? "src-" : var.resource_prefix) : var.resource_prefix
+
   network_tags = var.randomize_resource_names ? [
     substr("${random_id.compute_instance_network_tag[0].hex}-docker-mirror", 0, 64),
     "docker-mirror"

@@ -36,6 +36,10 @@ variable "executor_resource_prefix" {
   type        = string
   default     = ""
   description = "An optional prefix to add to all resources created."
+  validation {
+    condition     = can(regex("^[a-z].*", var.executor_resource_prefix))
+    error_message = "executor_resource_prefix must start with a lowercase letter."
+  }
 }
 
 variable "executor_machine_image" {

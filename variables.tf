@@ -188,6 +188,7 @@ variable "executor_docker_auth_config" {
 }
 
 variable "randomize_resource_names" {
+  default     = false
   type        = bool
   description = "Use randomized names for resources. Disable if you are upgrading existing executors that were deployed using the legacy naming conventions, unless you want to recreate executor resources on GCP."
 }

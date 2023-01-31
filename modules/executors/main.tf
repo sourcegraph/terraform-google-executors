@@ -1,14 +1,48 @@
 locals {
   prefix = var.resource_prefix != "" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
+
+  network_tags = var.randomize_resource_names ? [
+    substr("${random_id.compute_instance_network_tag[0].hex}-executors", 0, 64),
+    var.instance_tag,
+    "executors"
+  ] : []
+
+  resource_values = {
+    service_account = {
+      account_id   = var.randomize_resource_names ? substr("${random_id.service_account[0].hex}-executors", 0, 30) : "${substr(local.prefix, 0, 19)}executors"
+      display_name = var.randomize_resource_names ? "Service account for Sourcegraph executors" : "${var.resource_prefix}${var.resource_prefix != "" ? " " : ""}sourcegraph executors"
+    }
+    compute_instance_template = {
+      name_prefix = var.randomize_resource_names ? "${substr(var.resource_prefix, 0, 28)}executors-" : "${substr(local.prefix, 0, 28)}executor-"
+      tags        = var.randomize_resource_names ? local.network_tags : ["${local.prefix}executor"]
+      labels      = var.randomize_resource_names ? merge({ executor_tag = var.instance_tag }, var.labels) : { executor_tag = var.instance_tag }
+    }
+    compute_instance_group_manager = {
+      name               = var.randomize_resource_names ? "${random_id.compute_instance_group_executor[0].hex}-executors" : "${local.prefix}executor"
+      base_instance_name = var.randomize_resource_names ? "${random_id.compute_instance_group_executor[0].hex}-executors" : "${local.prefix}executor"
+    }
+    compute_autoscaler = {
+      name = var.randomize_resource_names ? "${random_id.compute_instance_group_executor[0].hex}-executors-autoscaler" : "${local.prefix}executor-autoscaler"
+    }
+    compute_firewall = {
+      name        = var.randomize_resource_names ? "${random_id.firewall_rule_prefix[0].hex}-executors-ssh" : "${local.prefix}executor-ssh-firewall"
+      target_tags = var.randomize_resource_names ? local.network_tags : ["${local.prefix}executor"]
+    }
+  }
+
 }
 
 # Fetch the google project set in the currently used provider.
 data "google_project" "project" {}
 
+resource "random_id" "service_account" {
+  count       = var.randomize_resource_names ? 1 : 0
+  prefix      = var.resource_prefix
+  byte_length = 4
+}
 resource "google_service_account" "sa" {
-  # ID can be no longer than 28 characters.
-  account_id   = "${substr(local.prefix, 0, 19)}executors"
-  display_name = "${var.resource_prefix}${var.resource_prefix != "" ? " " : ""}sourcegraph executors"
+  account_id   = local.resource_values.service_account.account_id
+  display_name = local.resource_values.service_account.display_name
 }
 
 resource "google_project_iam_member" "service_account_iam_log_writer" {
@@ -29,18 +63,21 @@ data "google_compute_image" "executor_image" {
   family  = "sourcegraph-executors-4-4"
 }
 
+resource "random_id" "compute_instance_network_tag" {
+  count       = var.randomize_resource_names ? 1 : 0
+  prefix      = var.resource_prefix
+  byte_length = 4
+}
 resource "google_compute_instance_template" "executor-instance-template" {
   # Need to use the beta provider here, some fields are otherwise not supported.
   provider     = google-beta
-  name_prefix  = "${substr(local.prefix, 0, 28)}executor-"
+  name_prefix  = local.resource_values.compute_instance_template.name_prefix
   machine_type = var.machine_type
 
   # This is used for networking.
-  tags = ["${local.prefix}executor"]
+  tags = local.resource_values.compute_instance_template.tags
 
-  labels = {
-    "executor_tag" = var.instance_tag
-  }
+  labels = local.resource_values.compute_instance_template.labels
 
   scheduling {
     automatic_restart = false
@@ -99,8 +136,13 @@ resource "google_compute_instance_template" "executor-instance-template" {
   }
 }
 
+resource "random_id" "compute_instance_group_executor" {
+  count       = var.randomize_resource_names ? 1 : 0
+  prefix      = var.resource_prefix
+  byte_length = 4
+}
 resource "google_compute_instance_group_manager" "executor" {
-  name = "${local.prefix}executor"
+  name = local.resource_values.compute_instance_group_manager.name
   zone = var.zone
 
   version {
@@ -108,7 +150,7 @@ resource "google_compute_instance_group_manager" "executor" {
     name              = "primary"
   }
 
-  base_instance_name = "${local.prefix}executor"
+  base_instance_name = local.resource_values.compute_instance_group_manager.base_instance_name
 
   update_policy {
     max_surge_percent = 100
@@ -126,7 +168,7 @@ resource "google_compute_instance_group_manager" "executor" {
 resource "google_compute_autoscaler" "executor-autoscaler" {
   # Need to use the beta provider here, some fields are otherwise not supported.
   provider = google-beta
-  name     = "${local.prefix}executor-autoscaler"
+  name     = local.resource_values.compute_autoscaler.name
   zone     = var.zone
   target   = google_compute_instance_group_manager.executor.id
 
@@ -146,10 +188,15 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
   }
 }
 
+resource "random_id" "firewall_rule_prefix" {
+  count       = var.randomize_resource_names ? 1 : 0
+  prefix      = var.resource_prefix
+  byte_length = 4
+}
 resource "google_compute_firewall" "executor-ssh-access" {
-  name        = "${local.prefix}executor-ssh-firewall"
+  name        = local.resource_values.compute_firewall.name
   network     = var.network_id
-  target_tags = ["${local.prefix}executor"]
+  target_tags = local.resource_values.compute_firewall.target_tags
 
   # Google IAP source range.
   source_ranges = ["35.235.240.0/20"]

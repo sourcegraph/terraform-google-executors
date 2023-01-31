@@ -59,3 +59,20 @@ variable "assign_public_ip" {
   default     = true
   description = "If false, no public IP will be associated with the executors."
 }
+
+variable "resource_prefix" {
+  type        = string
+  description = "A string to prefix all resources with"
+  default     = ""
+}
+
+variable "labels" {
+  type        = map(string)
+  description = "A map of labels to add to compute disks and instances"
+  default     = {}
+}
+
+variable "randomize_resource_names" {
+  type        = bool
+  description = "Use randomized names for resources. Disable if you are upgrading existing executors that were deployed using the legacy naming conventions, unless you want to recreate executor resources on GCP."
+}

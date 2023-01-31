@@ -14,3 +14,14 @@ variable "nat_min_ports_per_vm" {
   default     = 1024
   description = "The minimum number of ports per VM to use when NAT mode is enabled. Consider increasing this when you see egress packets being dropped."
 }
+
+variable "resource_prefix" {
+  type        = string
+  default     = ""
+  description = "An optional prefix to add to all resources created."
+}
+
+variable "randomize_resource_names" {
+  type        = bool
+  description = "Use randomized names for resources. Disable if you are upgrading existing executors that were deployed using the legacy naming conventions, unless you want to recreate executor resources on GCP."
+}

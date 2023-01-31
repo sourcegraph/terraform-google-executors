@@ -36,6 +36,10 @@ variable "executor_resource_prefix" {
   type        = string
   default     = ""
   description = "An optional prefix to add to all resources created."
+  validation {
+    condition     = var.executor_resource_prefix == "" || can(regex("^[a-z].*", var.executor_resource_prefix))
+    error_message = "The variable executor_resource_prefix must start with a lowercase letter."
+  }
 }
 
 variable "executor_machine_image" {
@@ -181,4 +185,10 @@ variable "executor_docker_auth_config" {
   type        = string
   default     = ""
   description = "If provided, this docker auth config file will be used to authorize image pulls. See [Using private registries](https://docs.sourcegraph.com/admin/deploy_executors#using-private-registries) for how to configure."
+}
+
+variable "randomize_resource_names" {
+  default     = false
+  type        = bool
+  description = "Use randomized names for resources. Disable if you are upgrading existing executors that were deployed using the legacy naming conventions, unless you want to recreate executor resources on GCP."
 }

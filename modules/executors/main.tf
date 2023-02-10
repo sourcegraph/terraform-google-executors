@@ -100,6 +100,17 @@ resource "google_compute_instance_template" "executor-instance-template" {
     disk_type    = "pd-ssd"
   }
 
+  dynamic "disk" {
+    for_each = var.use_local_ssd ? [1] : []
+    content {
+      device_name = "executor-pd"
+      interface = "SCSI"
+      disk_type = "local-ssd"
+      type = "SCRATCH"
+      disk_size_gb = 375
+    }
+  }
+
   network_interface {
     network    = var.network_id
     subnetwork = var.subnet_id
@@ -128,6 +139,8 @@ resource "google_compute_instance_template" "executor-instance-template" {
       "EXECUTOR_MAX_ACTIVE_TIME"            = var.max_active_time
       "EXECUTOR_USE_FIRECRACKER"            = var.use_firecracker
       "EXECUTOR_DOCKER_AUTH_CONFIG"         = var.docker_auth_config
+      "EXECUTOR_DOCKER_AUTH_CONFIG"         = var.docker_auth_config
+      "USE_LOCAL_SSD"                       = var.use_local_ssd
     }
   })
 

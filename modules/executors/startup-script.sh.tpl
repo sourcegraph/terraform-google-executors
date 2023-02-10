@@ -30,6 +30,17 @@ if [ "$${EXECUTOR_DOCKER_REGISTRY_MIRROR}" != '' ]; then
   fi
 fi
 
+if [ "$${USE_LOCAL_SSD}" = "true" ]; then
+    echo "Using local SSD, preparing"
+    mkfs.ext4 -F /dev/executor-pd
+    mkdir -p /mnt/executor-pd/
+    mount /dev/executor-pd /mnt/executor-pd
+    rsync -xa /var/lib/firecracker /mnt/executor-pd
+    umount /mnt/executor-pd
+    rm -rf /mnt/executor-pd
+    mount /dev/executor-pd /var/lib/firecracker
+fi
+
 # Write the systemd environment file used by the executor service
 cat <<EOF >/etc/systemd/system/executor.env
 EXECUTOR_QUEUE_NAME="$${EXECUTOR_QUEUE_NAME}"

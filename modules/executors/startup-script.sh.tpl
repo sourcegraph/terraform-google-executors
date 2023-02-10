@@ -32,13 +32,13 @@ fi
 
 if [ "$${USE_LOCAL_SSD}" = "true" ]; then
     echo "Using local SSD, preparing"
-    mkfs.ext4 -F /dev/executor-pd
+    mkfs.ext4 -F /dev/disk/by-id/google-executor-pd
     mkdir -p /mnt/executor-pd/
-    mount /dev/executor-pd /mnt/executor-pd
-    rsync -xa /var/lib/firecracker /mnt/executor-pd
+    mount /dev/disk/by-id/google-executor-pd /mnt/executor-pd
+    rsync -xa /var/lib/firecracker/ /mnt/executor-pd
     umount /mnt/executor-pd
     rm -rf /mnt/executor-pd
-    mount /dev/executor-pd /var/lib/firecracker
+    mount /dev/disk/by-id/google-executor-pd /var/lib/firecracker
 fi
 
 # Write the systemd environment file used by the executor service

@@ -38,7 +38,7 @@ if [ "$${USE_LOCAL_SSD}" = "true" ]; then
     rsync -xa /var/lib/firecracker/ /mnt/executor-pd
     umount /mnt/executor-pd
     rm -rf /mnt/executor-pd
-    mount /dev/disk/by-id/google-executor-pd /var/lib/firecracker
+    mount -o discard,defaults,nobarrier /dev/disk/by-id/google-executor-pd /var/lib/firecracker
 fi
 
 # Write the systemd environment file used by the executor service

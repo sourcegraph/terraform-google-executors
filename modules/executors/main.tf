@@ -80,8 +80,6 @@ resource "google_compute_instance_template" "executor-instance-template" {
   # This is used for networking.
   tags = local.resource_values.compute_instance_template.tags
 
-  labels = local.resource_values.compute_instance_template.labels
-
   scheduling {
     automatic_restart = false
     preemptible       = var.preemptible_machines
@@ -218,7 +216,6 @@ resource "google_compute_firewall" "executor-ssh-access" {
   name        = local.resource_values.compute_firewall.name
   network     = var.network_id
   target_tags = local.resource_values.compute_firewall.target_tags
-  labels = local.resource_values.compute_instance_template.labels
 
   # Google IAP source range.
   source_ranges = ["35.235.240.0/20"]

@@ -7,7 +7,7 @@ locals {
   resource_values = {
     compute_disk = {
       name   = var.randomize_resource_names ? "docker-mirror-${random_id.compute_disk_registry_data[0].hex}" : "docker-registry-data"
-      labels = var.randomize_resource_names ? var.labels : null
+      labels = var.randomize_resource_names ? merge({ executor_tag = "${var.instance_tag_prefix}-docker-mirror" }, var.labels) : { executor_tag = "${var.instance_tag_prefix}-docker-mirror" }
     }
     compute_instance = {
       name   = var.randomize_resource_names ? "docker-mirror-${random_id.compute_instance_default[0].hex}" : "sourcegraph-executors-docker-registry-mirror"
@@ -78,6 +78,7 @@ resource "google_compute_instance" "default" {
       image = var.machine_image != "" ? var.machine_image : data.google_compute_image.mirror_image.0.self_link
       size  = var.boot_disk_size
       type  = "pd-ssd"
+      labels = local.resource_values.compute_instance.labels
     }
   }
 

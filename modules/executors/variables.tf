@@ -72,7 +72,7 @@ variable "queue_name" {
 
 variable "maximum_runtime_per_job" {
   type        = string
-  default     = "30m"
+  default     = "45m"
   description = "The maximum wall time that can be spent on a single job"
 }
 

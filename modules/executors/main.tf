@@ -45,7 +45,6 @@ resource "random_id" "service_account" {
 resource "google_service_account" "sa" {
   account_id   = local.resource_values.service_account.account_id
   display_name = local.resource_values.service_account.display_name
-  labels       = local.resource_values.compute_instance_template.labels
 }
 
 resource "google_project_iam_member" "service_account_iam_log_writer" {
@@ -79,6 +78,8 @@ resource "google_compute_instance_template" "executor-instance-template" {
 
   # This is used for networking.
   tags = local.resource_values.compute_instance_template.tags
+
+  labels = local.resource_values.compute_instance_template.labels
 
   scheduling {
     automatic_restart = false

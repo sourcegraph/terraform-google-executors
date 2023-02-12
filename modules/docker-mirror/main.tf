@@ -61,6 +61,8 @@ resource "google_compute_instance" "default" {
   zone         = var.zone
   tags         = local.resource_values.compute_instance.tags
 
+  allow_stopping_for_update = true
+
   labels = local.resource_values.compute_instance.labels
 
   service_account {

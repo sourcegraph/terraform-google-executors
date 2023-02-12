@@ -2,14 +2,14 @@ locals {
   prefix = var.resource_prefix != "" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
 
   network_tags = var.randomize_resource_names ? [
-    substr("${random_id.compute_instance_network_tag[0].hex}-executors", 0, 64),
+    substr("executors-${random_id.compute_instance_network_tag[0].hex}", 0, 64),
     var.instance_tag,
     "executors"
   ] : []
 
   resource_values = {
     service_account = {
-      account_id   = var.randomize_resource_names ? substr("${random_id.service_account[0].hex}-executors", 0, 30) : "${substr(local.prefix, 0, 19)}executors"
+      account_id   = var.randomize_resource_names ? substr("executors-${random_id.service_account[0].hex}", 0, 30) : "${substr(local.prefix, 0, 19)}executors"
       display_name = var.randomize_resource_names ? "Service account for Sourcegraph executors" : "${var.resource_prefix}${var.resource_prefix != "" ? " " : ""}sourcegraph executors"
     }
     compute_instance_template = {
@@ -18,14 +18,14 @@ locals {
       labels      = var.randomize_resource_names ? merge({ executor_tag = var.instance_tag }, var.labels) : { executor_tag = var.instance_tag }
     }
     compute_instance_group_manager = {
-      name               = var.randomize_resource_names ? "${random_id.compute_instance_group_executor[0].hex}-executors" : "${local.prefix}executor"
-      base_instance_name = var.randomize_resource_names ? "${random_id.compute_instance_group_executor[0].hex}-executors" : "${local.prefix}executor"
+      name               = var.randomize_resource_names ? "executors-${random_id.compute_instance_group_executor[0].hex}" : "${local.prefix}executor"
+      base_instance_name = var.randomize_resource_names ? "executors-${random_id.compute_instance_group_executor[0].hex}" : "${local.prefix}executor"
     }
     compute_autoscaler = {
-      name = var.randomize_resource_names ? "${random_id.compute_instance_group_executor[0].hex}-executors-autoscaler" : "${local.prefix}executor-autoscaler"
+      name = var.randomize_resource_names ? "executors-autoscaler-${random_id.compute_instance_group_executor[0].hex}" : "${local.prefix}executor-autoscaler"
     }
     compute_firewall = {
-      name        = var.randomize_resource_names ? "${random_id.firewall_rule_prefix[0].hex}-executors-ssh" : "${local.prefix}executor-ssh-firewall"
+      name        = var.randomize_resource_names ? "executors-ssh-${random_id.firewall_rule_prefix[0].hex}" : "${local.prefix}executor-ssh-firewall"
       target_tags = var.randomize_resource_names ? local.network_tags : ["${local.prefix}executor"]
     }
   }

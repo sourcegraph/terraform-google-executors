@@ -3,19 +3,19 @@ locals {
 
   resource_values = {
     compute_network = {
-      name = var.randomize_resource_names ? "${random_id.network[0].hex}-executors" : "sourcegraph-executors"
+      name = var.randomize_resource_names ? "executors-${random_id.network[0].hex}" : "sourcegraph-executors"
     }
     compute_subnetwork = {
-      name = var.randomize_resource_names ? "${random_id.subnetwork[0].hex}-executors-subnet" : "sourcegraph-executors-subnet"
+      name = var.randomize_resource_names ? "executors-subnet-${random_id.subnetwork[0].hex}" : "sourcegraph-executors-subnet"
     }
     compute_router = {
-      name = var.randomize_resource_names ? "${random_id.router[0].hex}-executors" : "sourcegraph-executors-router"
+      name = var.randomize_resource_names ? "executors-${random_id.router[0].hex}" : "sourcegraph-executors-router"
     }
     compute_address = {
-      name = var.randomize_resource_names ? "${random_id.compute_address_nat[0].hex}-executors" : "sourcegraph-executors-router"
+      name = var.randomize_resource_names ? "executors-${random_id.compute_address_nat[0].hex}" : "sourcegraph-executors-router"
     }
     compute_router_nat = {
-      name = var.randomize_resource_names ? "${random_id.router_nat[0].hex}-executors" : "sourcegraph-executors-nat"
+      name = var.randomize_resource_names ? "executors-${random_id.router_nat[0].hex}" : "sourcegraph-executors-nat"
     }
   }
 }

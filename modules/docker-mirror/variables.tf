@@ -21,7 +21,7 @@ variable "machine_image" {
 
 variable "machine_type" {
   type        = string
-  default     = "n1-standard-2" // 2 vCPU, 7.5GB
+  default     = "n2-standard-2" // 2 vCPU, 8GB
   description = "Docker registry mirror node machine type."
 }
 

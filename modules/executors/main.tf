@@ -45,6 +45,7 @@ resource "random_id" "service_account" {
 resource "google_service_account" "sa" {
   account_id   = local.resource_values.service_account.account_id
   display_name = local.resource_values.service_account.display_name
+  labels       = local.resource_values.compute_instance_template.labels
 }
 
 resource "google_project_iam_member" "service_account_iam_log_writer" {
@@ -100,6 +101,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
     disk_size_gb = local.boot_disk_size
     boot         = true
     disk_type    = "pd-ssd"
+    labels       = local.resource_values.compute_instance_template.labels
   }
 
   dynamic "disk" {
@@ -110,6 +112,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
       disk_type = "local-ssd"
       type = "SCRATCH"
       disk_size_gb = 375
+      labels = local.resource_values.compute_instance_template.labels
     }
   }
 
@@ -160,6 +163,8 @@ resource "google_compute_instance_group_manager" "executor" {
   name = local.resource_values.compute_instance_group_manager.name
   zone = var.zone
 
+  labels = local.resource_values.compute_instance_template.labels
+
   version {
     instance_template = google_compute_instance_template.executor-instance-template.id
     name              = "primary"
@@ -186,6 +191,7 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
   name     = local.resource_values.compute_autoscaler.name
   zone     = var.zone
   target   = google_compute_instance_group_manager.executor.id
+  labels = local.resource_values.compute_instance_template.labels
 
   autoscaling_policy {
     min_replicas    = var.min_replicas
@@ -212,6 +218,7 @@ resource "google_compute_firewall" "executor-ssh-access" {
   name        = local.resource_values.compute_firewall.name
   network     = var.network_id
   target_tags = local.resource_values.compute_firewall.target_tags
+  labels = local.resource_values.compute_instance_template.labels
 
   # Google IAP source range.
   source_ranges = ["35.235.240.0/20"]

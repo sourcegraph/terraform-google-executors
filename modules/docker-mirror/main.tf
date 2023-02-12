@@ -36,6 +36,7 @@ resource "random_id" "compute_disk_registry_data" {
   byte_length = 6
 }
 resource "google_compute_disk" "registry-data" {
+  count = var.use_local_ssd ? 0 : 1
   name   = local.resource_values.compute_disk.name
   type   = "pd-ssd"
   zone   = var.zone
@@ -78,13 +79,27 @@ resource "google_compute_instance" "default" {
     }
   }
 
-  attached_disk {
-    source      = google_compute_disk.registry-data.self_link
-    device_name = "registry-data"
-    mode        = "READ_WRITE"
+  dynamic "scratch_disk" {
+    for_each = var.use_local_ssd ? [1] : []
+    content {
+      interface = "NVME"
+    }
   }
 
-  metadata_startup_script = file("${path.module}/startup-script.sh")
+  dynamic "attached_disk" {
+    for_each = var.use_local_ssd ? [] : [1]
+    content {
+      source      = google_compute_disk.0.registry-data.self_link
+      device_name = "registry-data"
+      mode        = "READ_WRITE"
+    }
+  }
+
+  metadata_startup_script = templatefile("${path.module}/startup-script.sh.tpl", {
+    environment_variables = {
+      "USE_LOCAL_SSD" = var.use_local_ssd
+    }
+  })
 
   network_interface {
     network    = var.network_id

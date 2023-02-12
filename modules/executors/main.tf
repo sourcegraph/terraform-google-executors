@@ -162,8 +162,6 @@ resource "google_compute_instance_group_manager" "executor" {
   name = local.resource_values.compute_instance_group_manager.name
   zone = var.zone
 
-  labels = local.resource_values.compute_instance_template.labels
-
   version {
     instance_template = google_compute_instance_template.executor-instance-template.id
     name              = "primary"
@@ -190,7 +188,6 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
   name     = local.resource_values.compute_autoscaler.name
   zone     = var.zone
   target   = google_compute_instance_group_manager.executor.id
-  labels = local.resource_values.compute_instance_template.labels
 
   autoscaling_policy {
     min_replicas    = var.min_replicas

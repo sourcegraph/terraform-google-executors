@@ -3,19 +3,19 @@ locals {
 
   resource_values = {
     compute_network = {
-      name = var.randomize_resource_names ? "executors-${random_id.network[0].hex}" : "sourcegraph-executors"
+      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-${random_id.network[0].hex}" : "sourcegraph-executors"
     }
     compute_subnetwork = {
-      name = var.randomize_resource_names ? "executors-subnet-${random_id.subnetwork[0].hex}" : "sourcegraph-executors-subnet"
+      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-subnet-${random_id.subnetwork[0].hex}" : "sourcegraph-executors-subnet"
     }
     compute_router = {
-      name = var.randomize_resource_names ? "executors-${random_id.router[0].hex}" : "sourcegraph-executors-router"
+      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-${random_id.router[0].hex}" : "sourcegraph-executors-router"
     }
     compute_address = {
-      name = var.randomize_resource_names ? "executors-${random_id.compute_address_nat[0].hex}" : "sourcegraph-executors-router"
+      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-${random_id.compute_address_nat[0].hex}" : "sourcegraph-executors-router"
     }
     compute_router_nat = {
-      name = var.randomize_resource_names ? "executors-${random_id.router_nat[0].hex}" : "sourcegraph-executors-nat"
+      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-${random_id.router_nat[0].hex}" : "sourcegraph-executors-nat"
     }
   }
 }
@@ -23,7 +23,6 @@ locals {
 
 resource "random_id" "network" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 6
 }
 resource "google_compute_network" "default" {
@@ -34,7 +33,6 @@ resource "google_compute_network" "default" {
 
 resource "random_id" "subnetwork" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 6
 }
 resource "google_compute_subnetwork" "default" {
@@ -48,7 +46,6 @@ resource "google_compute_subnetwork" "default" {
 # If NAT mode is enabled, we create a custom router for our network.
 resource "random_id" "router" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 6
 }
 resource "google_compute_router" "default" {
@@ -61,7 +58,6 @@ resource "google_compute_router" "default" {
 
 resource "random_id" "compute_address_nat" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 6
 }
 # Then NAT mode is enabled, we want a static IP for it.
@@ -74,7 +70,6 @@ resource "google_compute_address" "nat" {
 
 resource "random_id" "router_nat" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 6
 }
 resource "google_compute_router_nat" "default" {

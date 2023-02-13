@@ -2,30 +2,30 @@ locals {
   prefix = var.resource_prefix != "" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
 
   network_tags = var.randomize_resource_names ? [
-    substr("${random_id.compute_instance_network_tag[0].hex}-executors", 0, 64),
+    substr("${var.resource_prefix}-executors-${random_id.compute_instance_network_tag[0].hex}", 0, 64),
     var.instance_tag,
     "executors"
   ] : []
 
   resource_values = {
     service_account = {
-      account_id   = var.randomize_resource_names ? substr("${random_id.service_account[0].hex}-executors", 0, 30) : "${substr(local.prefix, 0, 19)}executors"
+      account_id   = var.randomize_resource_names ? substr("${var.resource_prefix}-executors-${random_id.service_account[0].hex}", 0, 30) : "${substr(local.prefix, 0, 19)}executors"
       display_name = var.randomize_resource_names ? "Service account for Sourcegraph executors" : "${var.resource_prefix}${var.resource_prefix != "" ? " " : ""}sourcegraph executors"
     }
     compute_instance_template = {
-      name_prefix = var.randomize_resource_names ? "${substr(var.resource_prefix, 0, 28)}executors-" : "${substr(local.prefix, 0, 28)}executor-"
+      name_prefix = var.randomize_resource_names ? "${substr(var.resource_prefix, 0, 28)}-executors-" : "${substr(local.prefix, 0, 28)}executor-"
       tags        = var.randomize_resource_names ? local.network_tags : ["${local.prefix}executor"]
       labels      = var.randomize_resource_names ? merge({ executor_tag = var.instance_tag }, var.labels) : { executor_tag = var.instance_tag }
     }
     compute_instance_group_manager = {
-      name               = var.randomize_resource_names ? "${random_id.compute_instance_group_executor[0].hex}-executors" : "${local.prefix}executor"
-      base_instance_name = var.randomize_resource_names ? "${random_id.compute_instance_group_executor[0].hex}-executors" : "${local.prefix}executor"
+      name               = var.randomize_resource_names ? "${var.resource_prefix}-executors-${random_id.compute_instance_group_executor[0].hex}" : "${local.prefix}executor"
+      base_instance_name = var.randomize_resource_names ? "${var.resource_prefix}-executors-${random_id.compute_instance_group_executor[0].hex}" : "${local.prefix}executor"
     }
     compute_autoscaler = {
-      name = var.randomize_resource_names ? "${random_id.compute_instance_group_executor[0].hex}-executors-autoscaler" : "${local.prefix}executor-autoscaler"
+      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-autoscaler-${random_id.compute_instance_group_executor[0].hex}" : "${local.prefix}executor-autoscaler"
     }
     compute_firewall = {
-      name        = var.randomize_resource_names ? "${random_id.firewall_rule_prefix[0].hex}-executors-ssh" : "${local.prefix}executor-ssh-firewall"
+      name        = var.randomize_resource_names ? "${var.resource_prefix}-executors-ssh-${random_id.firewall_rule_prefix[0].hex}" : "${local.prefix}executor-ssh-firewall"
       target_tags = var.randomize_resource_names ? local.network_tags : ["${local.prefix}executor"]
     }
   }
@@ -37,7 +37,6 @@ data "google_project" "project" {}
 
 resource "random_id" "service_account" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 4
 }
 resource "google_service_account" "sa" {
@@ -65,7 +64,6 @@ data "google_compute_image" "executor_image" {
 
 resource "random_id" "compute_instance_network_tag" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 4
 }
 resource "google_compute_instance_template" "executor-instance-template" {
@@ -138,7 +136,6 @@ resource "google_compute_instance_template" "executor-instance-template" {
 
 resource "random_id" "compute_instance_group_executor" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 4
 }
 resource "google_compute_instance_group_manager" "executor" {
@@ -190,7 +187,6 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
 
 resource "random_id" "firewall_rule_prefix" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 4
 }
 resource "google_compute_firewall" "executor-ssh-access" {

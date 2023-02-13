@@ -65,8 +65,8 @@ variable "resource_prefix" {
   description = "A string to prefix all resources with"
   default     = ""
   validation {
-    condition     = var.resource_prefix == "" || can(regex("^[a-z].*", var.resource_prefix))
-    error_message = "The variable executor_resource_prefix must start with a lowercase letter."
+    condition     = var.resource_prefix == "" || (can(regex("^[a-z].*", var.resource_prefix)) && endswith(var.resource_prefix, "-"))
+    error_message = "The variable resource_prefix must start with a lowercase letter and end with a '-'."
   }
 }
 

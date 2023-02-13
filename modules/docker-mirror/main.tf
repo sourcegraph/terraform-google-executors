@@ -6,7 +6,7 @@ locals {
 
   resource_values = {
     compute_disk = {
-      name   = var.randomize_resource_names ? "docker-mirror-${random_id.compute_disk_registry_data[0].hex}" : "docker-registry-data"
+      name   = var.randomize_resource_names ? "${}docker-mirror-${random_id.compute_disk_registry_data[0].hex}" : "docker-registry-data"
       labels = var.randomize_resource_names ? var.labels : null
     }
     compute_instance = {
@@ -32,7 +32,6 @@ data "google_project" "project" {}
 
 resource "random_id" "compute_disk_registry_data" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 6
 }
 resource "google_compute_disk" "registry-data" {
@@ -51,7 +50,6 @@ data "google_compute_image" "mirror_image" {
 
 resource "random_id" "compute_instance_default" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 6
 }
 resource "google_compute_instance" "default" {
@@ -102,12 +100,10 @@ resource "google_compute_instance" "default" {
 
 resource "random_id" "compute_instance_network_tag" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 4
 }
 resource "random_id" "firewall_rule_prefix" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 4
 }
 
@@ -151,7 +147,6 @@ resource "google_compute_firewall" "ssh" {
 
 resource "random_id" "compute_address_static" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 6
 }
 
@@ -163,7 +158,6 @@ resource "google_compute_address" "static" {
 
 resource "random_id" "service_account" {
   count       = var.randomize_resource_names ? 1 : 0
-  prefix      = var.resource_prefix
   byte_length = 4
 }
 resource "google_service_account" "sa" {

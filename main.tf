@@ -1,14 +1,8 @@
-locals {
-  // can't set a default value for resource_prefix as it potentially breaks legacy deployments that didn't set a prefix
-  // some kind of prefix is required when randomizing to ensure naming constraints are met (start with a lowercase letter)
-  resource_prefix = var.randomize_resource_names ? (var.executor_resource_prefix == "" ? "src-" : var.executor_resource_prefix) : var.executor_resource_prefix
-}
-
 module "gcp-networking" {
   source = "./modules/networking"
 
   randomize_resource_names = var.randomize_resource_names
-  resource_prefix          = local.resource_prefix
+  resource_prefix          = var.executor_resource_prefix
   region                   = var.region
   nat                      = var.private_networking
 }
@@ -17,7 +11,7 @@ module "gcp-docker-mirror" {
   source = "./modules/docker-mirror"
 
   randomize_resource_names = var.randomize_resource_names
-  resource_prefix          = local.resource_prefix
+  resource_prefix          = var.executor_resource_prefix
   zone                     = var.zone
   network_id               = module.gcp-networking.network_id
   subnet_id                = module.gcp-networking.subnet_id
@@ -37,7 +31,7 @@ module "gcp-executors" {
   zone                                     = var.zone
   network_id                               = module.gcp-networking.network_id
   subnet_id                                = module.gcp-networking.subnet_id
-  resource_prefix                          = local.resource_prefix
+  resource_prefix                          = var.executor_resource_prefix
   machine_image                            = var.executor_machine_image
   machine_type                             = var.executor_machine_type
   boot_disk_size                           = var.executor_boot_disk_size

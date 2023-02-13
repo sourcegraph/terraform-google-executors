@@ -1,6 +1,6 @@
 locals {
   network_tags = var.randomize_resource_names ? [
-    substr("docker-mirror-${random_id.compute_instance_network_tag[0].hex}", 0, 64),
+    substr("${random_id.compute_instance_network_tag[0].hex}-docker-mirror", 0, 64),
     "docker-mirror"
   ] : []
 
@@ -10,19 +10,19 @@ locals {
       labels = var.randomize_resource_names ? merge({ executor_tag = "${var.instance_tag_prefix}-docker-mirror" }, var.labels) : { executor_tag = "${var.instance_tag_prefix}-docker-mirror" }
     }
     compute_instance = {
-      name   = var.randomize_resource_names ? "docker-mirror-${random_id.compute_instance_default[0].hex}" : "sourcegraph-executors-docker-registry-mirror"
+      name   = var.randomize_resource_names ? "${random_id.compute_instance_default[0].hex}-docker-mirror" : "sourcegraph-executors-docker-registry-mirror"
       tags   = var.randomize_resource_names ? local.network_tags : ["docker-registry-mirror"]
       labels = var.randomize_resource_names ? merge({ executor_tag = "${var.instance_tag_prefix}-docker-mirror" }, var.labels) : { executor_tag = "${var.instance_tag_prefix}-docker-mirror" }
     }
     compute_firewall = {
-      name_prefix = var.randomize_resource_names ? "docker-mirror-${random_id.firewall_rule_prefix[0].hex}-" : "sourcegraph-executor-docker-mirror-"
+      name_prefix = var.randomize_resource_names ? "${random_id.firewall_rule_prefix[0].hex}-docker-mirror-" : "sourcegraph-executor-docker-mirror-"
       target_tags = var.randomize_resource_names ? local.network_tags : ["docker-registry-mirror"]
     }
     compute_address = {
-      name = var.randomize_resource_names ? "docker-registry-mirror-${random_id.compute_address_static[0].hex}" : "sg-executor-docker-registry-mirror"
+      name = var.randomize_resource_names ? "${random_id.compute_address_static[0].hex}-docker-registry-mirror" : "sg-executor-docker-registry-mirror"
     }
     service_account = {
-      account_id = var.randomize_resource_names ? substr("docker-mirror-${random_id.service_account[0].hex}", 0, 30) : "sg-executor-docker-registry"
+      account_id = var.randomize_resource_names ? substr("${random_id.service_account[0].hex}-docker-mirror", 0, 30) : "sg-executor-docker-registry"
     }
   }
 }

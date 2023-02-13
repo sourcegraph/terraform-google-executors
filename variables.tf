@@ -16,13 +16,13 @@ variable "docker_mirror_machine_image" {
 
 variable "docker_mirror_machine_type" {
   type        = string
-  default     = "n1-standard-2" // 2 vCPU, 7.5GB
+  default     = "n2-standard-2" // 2 vCPU, 8GB
   description = "Docker registry mirror node machine type"
 }
 
 variable "docker_mirror_boot_disk_size" {
   type        = number
-  default     = 64 // 64GB
+  default     = 10 // 10 GB
   description = "Docker registry mirror node disk size in GB"
 }
 
@@ -50,7 +50,7 @@ variable "executor_machine_image" {
 
 variable "executor_machine_type" {
   type        = string
-  default     = "n1-standard-4" // 4 vCPU, 15GB
+  default     = "c2-standard-8" // 8 vCPU, 32GB
   description = "Executor node machine type"
 }
 
@@ -95,7 +95,7 @@ variable "executor_queue_name" {
 
 variable "executor_maximum_runtime_per_job" {
   type        = string
-  default     = "30m"
+  default     = "45m"
   description = "The maximum wall time that can be spent on a single job"
 }
 
@@ -113,7 +113,7 @@ variable "executor_num_total_jobs" {
 
 variable "executor_max_active_time" {
   type        = string
-  default     = "2h"
+  default     = "12h"
   description = "The maximum time that can be spent by the worker dequeueing records to be handled"
 }
 

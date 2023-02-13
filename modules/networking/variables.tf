@@ -20,8 +20,8 @@ variable "resource_prefix" {
   default     = ""
   description = "An optional prefix to add to all resources created."
   validation {
-    condition     = var.resource_prefix == "" || (can(regex("^[a-z].*", var.resource_prefix)) && endswith(var.resource_prefix, "-"))
-    error_message = "The variable resource_prefix must start with a lowercase letter and end with a '-'."
+    condition     = var.resource_prefix == "" || can(regex("^[a-z].*", var.resource_prefix))
+    error_message = "The variable resource_prefix must start with a lowercase letter."
   }
 }
 

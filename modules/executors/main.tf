@@ -30,8 +30,8 @@ locals {
     }
   }
 
-  # if using local SSDs and using the default value of 100, lower it to 20, otherwise use the configured value either way.
-  boot_disk_size = var.use_local_ssd ? var.boot_disk_size == 100 ? 20 : var.boot_disk_size : var.boot_disk_size
+  # if using local SSDs and using the default value of 100, lower it to 10, otherwise use the configured value either way.
+  boot_disk_size = var.use_local_ssd ? var.boot_disk_size == 100 ? 10 : var.boot_disk_size : var.boot_disk_size
 }
 
 # Fetch the google project set in the currently used provider.
@@ -138,7 +138,6 @@ resource "google_compute_instance_template" "executor-instance-template" {
       "EXECUTOR_NUM_TOTAL_JOBS"             = var.num_total_jobs
       "EXECUTOR_MAX_ACTIVE_TIME"            = var.max_active_time
       "EXECUTOR_USE_FIRECRACKER"            = var.use_firecracker
-      "EXECUTOR_DOCKER_AUTH_CONFIG"         = var.docker_auth_config
       "EXECUTOR_DOCKER_AUTH_CONFIG"         = var.docker_auth_config
       "USE_LOCAL_SSD"                       = var.use_local_ssd
     }

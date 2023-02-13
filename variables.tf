@@ -22,8 +22,14 @@ variable "docker_mirror_machine_type" {
 
 variable "docker_mirror_boot_disk_size" {
   type        = number
-  default     = 32 // 32GB
+  default     = 64 // 64GB
   description = "Docker registry mirror node disk size in GB"
+}
+
+variable "docker_mirror_use_local_ssd" {
+  type        = bool
+  default     = false
+  description = "Use a local SSD for the data dir of the registry instead of a persistent disk. This will mean that the cache will reset after the instance is replaced! disk_size is also not honored when true."
 }
 
 variable "docker_mirror_http_access_cidr_ranges" {
@@ -50,8 +56,14 @@ variable "executor_machine_image" {
 
 variable "executor_machine_type" {
   type        = string
-  default     = "c2-standard-8" // 8 vCPU, 32GB
+  default     = "n1-standard-4" // 4 vCPU, 15GB
   description = "Executor node machine type"
+}
+
+variable "executor_use_local_ssd" {
+  type        = bool
+  default     = false
+  description = "Use a local SSD for the data dir of the registry instead of a persistent disk. This will mean that the cache will reset after the instance is replaced! disk_size is also not honored when true."
 }
 
 variable "executor_boot_disk_size" {
@@ -95,7 +107,7 @@ variable "executor_queue_name" {
 
 variable "executor_maximum_runtime_per_job" {
   type        = string
-  default     = "45m"
+  default     = "30m"
   description = "The maximum wall time that can be spent on a single job"
 }
 
@@ -113,7 +125,7 @@ variable "executor_num_total_jobs" {
 
 variable "executor_max_active_time" {
   type        = string
-  default     = "12h"
+  default     = "2h"
   description = "The maximum time that can be spent by the worker dequeueing records to be handled"
 }
 

@@ -27,6 +27,7 @@ module "gcp-docker-mirror" {
   boot_disk_size           = var.docker_mirror_boot_disk_size
   instance_tag_prefix      = var.executor_instance_tag
   assign_public_ip         = var.private_networking ? false : true
+  use_local_ssd            = var.docker_mirror_use_local_ssd
 }
 
 module "gcp-executors" {
@@ -61,4 +62,5 @@ module "gcp-executors" {
   docker_registry_mirror_node_exporter_url = "http://${module.gcp-docker-mirror.ip_address}:9999"
   assign_public_ip                         = var.private_networking ? false : true
   docker_auth_config                       = var.executor_docker_auth_config
+  use_local_ssd                            = var.executor_use_local_ssd
 }

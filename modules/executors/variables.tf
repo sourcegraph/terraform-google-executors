@@ -31,7 +31,7 @@ variable "machine_image" {
 
 variable "machine_type" {
   type        = string
-  default     = "c2-standard-8" // 8 vCPU, 32GB
+  default     = "n1-standard-4" // 4 vCPU, 15GB
   description = "Executor node machine type"
 }
 
@@ -76,7 +76,7 @@ variable "queue_name" {
 
 variable "maximum_runtime_per_job" {
   type        = string
-  default     = "45m"
+  default     = "30m"
   description = "The maximum wall time that can be spent on a single job"
 }
 
@@ -94,7 +94,7 @@ variable "num_total_jobs" {
 
 variable "max_active_time" {
   type        = string
-  default     = "12h"
+  default     = "2h"
   description = "The maximum time that can be spent by the worker dequeueing records to be handled"
 }
 

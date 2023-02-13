@@ -1,6 +1,6 @@
 locals {
   resource_prefix = (var.resource_prefix == "" || endswith(var.resource_prefix, "-")) ? var.resource_prefix : "${var.resource_prefix}-"
-  legacy_prefix = local.resource_prefix != "" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
+  legacy_prefix   = local.resource_prefix != "" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
 
   network_tags = var.randomize_resource_names ? [
     substr("${local.resource_prefix}executors-${random_id.compute_instance_network_tag[0].hex}", 0, 64),

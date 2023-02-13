@@ -1,5 +1,5 @@
 locals {
-  resource_prefix = (var.resource_prefix == "" || endswith(var.resource_prefix, "-")) ? var.resource_prefix : "${var.resource_prefix}-"
+  resource_prefix = (var.resource_prefix == "" || substr(var.resource_prefix, -1, -2) == "-") ? var.resource_prefix : "${var.resource_prefix}-"
 
   network_tags = var.randomize_resource_names ? [
     substr("${local.resource_prefix}docker-mirror-${random_id.compute_instance_network_tag[0].hex}", 0, 64),

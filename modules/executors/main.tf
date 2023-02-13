@@ -1,5 +1,5 @@
 locals {
-  resource_prefix = (var.resource_prefix == "" || endswith(var.resource_prefix, "-")) ? var.resource_prefix : "${var.resource_prefix}-"
+  resource_prefix = (var.resource_prefix == "" || substr(var.resource_prefix, -1, -2) == "-") ? var.resource_prefix : "${var.resource_prefix}-"
   legacy_prefix   = local.resource_prefix != "" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
 
   network_tags = var.randomize_resource_names ? [

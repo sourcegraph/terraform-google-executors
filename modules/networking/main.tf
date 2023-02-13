@@ -1,21 +1,23 @@
 locals {
   ip_cidr = "10.0.1.0/24"
 
+  resource_prefix = (var.resource_prefix == "" || endswith(var.resource_prefix, "-")) ? var.resource_prefix : "${var.resource_prefix}-"
+
   resource_values = {
     compute_network = {
-      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-${random_id.network[0].hex}" : "sourcegraph-executors"
+      name = var.randomize_resource_names ? "${local.resource_prefix}executors-${random_id.network[0].hex}" : "sourcegraph-executors"
     }
     compute_subnetwork = {
-      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-subnet-${random_id.subnetwork[0].hex}" : "sourcegraph-executors-subnet"
+      name = var.randomize_resource_names ? "${local.resource_prefix}executors-subnet-${random_id.subnetwork[0].hex}" : "sourcegraph-executors-subnet"
     }
     compute_router = {
-      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-${random_id.router[0].hex}" : "sourcegraph-executors-router"
+      name = var.randomize_resource_names ? "${local.resource_prefix}executors-${random_id.router[0].hex}" : "sourcegraph-executors-router"
     }
     compute_address = {
-      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-${random_id.compute_address_nat[0].hex}" : "sourcegraph-executors-router"
+      name = var.randomize_resource_names ? "${local.resource_prefix}executors-${random_id.compute_address_nat[0].hex}" : "sourcegraph-executors-router"
     }
     compute_router_nat = {
-      name = var.randomize_resource_names ? "${var.resource_prefix}-executors-${random_id.router_nat[0].hex}" : "sourcegraph-executors-nat"
+      name = var.randomize_resource_names ? "${local.resource_prefix}executors-${random_id.router_nat[0].hex}" : "sourcegraph-executors-nat"
     }
   }
 }

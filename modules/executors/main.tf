@@ -106,12 +106,12 @@ resource "google_compute_instance_template" "executor-instance-template" {
   dynamic "disk" {
     for_each = var.use_local_ssd ? [1] : []
     content {
-      device_name = "executor-pd"
-      interface = "NVME"
-      disk_type = "local-ssd"
-      type = "SCRATCH"
+      device_name  = "executor-pd"
+      interface    = "NVME"
+      disk_type    = "local-ssd"
+      type         = "SCRATCH"
       disk_size_gb = 375
-      labels = local.resource_values.compute_instance_template.labels
+      labels       = local.resource_values.compute_instance_template.labels
     }
   }
 

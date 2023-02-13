@@ -36,7 +36,7 @@ resource "random_id" "compute_disk_registry_data" {
   byte_length = 6
 }
 resource "google_compute_disk" "registry-data" {
-  count = var.use_local_ssd ? 0 : 1
+  count  = var.use_local_ssd ? 0 : 1
   name   = local.resource_values.compute_disk.name
   type   = "pd-ssd"
   zone   = var.zone
@@ -75,9 +75,9 @@ resource "google_compute_instance" "default" {
 
   boot_disk {
     initialize_params {
-      image = var.machine_image != "" ? var.machine_image : data.google_compute_image.mirror_image.0.self_link
-      size  = var.boot_disk_size
-      type  = "pd-ssd"
+      image  = var.machine_image != "" ? var.machine_image : data.google_compute_image.mirror_image.0.self_link
+      size   = var.boot_disk_size
+      type   = "pd-ssd"
       labels = local.resource_values.compute_instance.labels
     }
   }

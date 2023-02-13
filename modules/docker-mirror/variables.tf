@@ -21,13 +21,13 @@ variable "machine_image" {
 
 variable "machine_type" {
   type        = string
-  default     = "n1-standard-2" // 2 vCPU, 7.5GB
+  default     = "n2-standard-2" // 2 vCPU, 8GB
   description = "Docker registry mirror node machine type."
 }
 
 variable "boot_disk_size" {
   type        = number
-  default     = 32
+  default     = 10
   description = "Docker registry mirror node disk size in GB."
 }
 
@@ -80,4 +80,10 @@ variable "randomize_resource_names" {
   default     = false
   type        = bool
   description = "Use randomized names for resources. Disable if you are upgrading existing executors that were deployed using the legacy naming conventions, unless you want to recreate executor resources on GCP."
+}
+
+variable "use_local_ssd" {
+  type        = bool
+  default     = false
+  description = "Use a local SSD for the data dir of the registry instead of a persistent disk. This will mean that the cache will reset after the instance is replaced! disk_size is also not honored when true."
 }

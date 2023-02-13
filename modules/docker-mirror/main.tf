@@ -75,10 +75,9 @@ resource "google_compute_instance" "default" {
 
   boot_disk {
     initialize_params {
-      image  = var.machine_image != "" ? var.machine_image : data.google_compute_image.mirror_image.0.self_link
-      size   = var.boot_disk_size
-      type   = "pd-ssd"
-      labels = local.resource_values.compute_instance.labels
+      image = var.machine_image != "" ? var.machine_image : data.google_compute_image.mirror_image.0.self_link
+      size  = var.boot_disk_size
+      type  = "pd-ssd"
     }
   }
 

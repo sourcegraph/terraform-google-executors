@@ -100,7 +100,6 @@ resource "google_compute_instance_template" "executor-instance-template" {
     disk_size_gb = local.boot_disk_size
     boot         = true
     disk_type    = "pd-ssd"
-    labels       = local.resource_values.compute_instance_template.labels
   }
 
   dynamic "disk" {
@@ -111,7 +110,6 @@ resource "google_compute_instance_template" "executor-instance-template" {
       disk_type    = "local-ssd"
       type         = "SCRATCH"
       disk_size_gb = 375
-      labels       = local.resource_values.compute_instance_template.labels
     }
   }
 

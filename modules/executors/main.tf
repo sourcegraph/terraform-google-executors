@@ -31,6 +31,8 @@ locals {
     }
   }
 
+  # if using local SSDs and using the default value of 100, lower it to 10, otherwise use the configured value either way.
+  boot_disk_size = var.use_local_ssd ? (var.boot_disk_size == 100 ? 10 : var.boot_disk_size) : var.boot_disk_size
 }
 
 # Fetch the google project set in the currently used provider.
@@ -94,9 +96,20 @@ resource "google_compute_instance_template" "executor-instance-template" {
 
   disk {
     source_image = var.machine_image != "" ? var.machine_image : data.google_compute_image.executor_image.0.self_link
-    disk_size_gb = var.boot_disk_size
+    disk_size_gb = local.boot_disk_size
     boot         = true
     disk_type    = "pd-ssd"
+  }
+
+  dynamic "disk" {
+    for_each = var.use_local_ssd ? [1] : []
+    content {
+      device_name  = "executor-pd"
+      interface    = "NVME"
+      disk_type    = "local-ssd"
+      type         = "SCRATCH"
+      disk_size_gb = 375
+    }
   }
 
   network_interface {
@@ -127,6 +140,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
       "EXECUTOR_MAX_ACTIVE_TIME"            = var.max_active_time
       "EXECUTOR_USE_FIRECRACKER"            = var.use_firecracker
       "EXECUTOR_DOCKER_AUTH_CONFIG"         = var.docker_auth_config
+      "USE_LOCAL_SSD"                       = var.use_local_ssd
     }
   })
 

@@ -193,3 +193,9 @@ variable "randomize_resource_names" {
   type        = bool
   description = "Use randomized names for resources. Disable if you are upgrading existing executors that were deployed using the legacy naming conventions, unless you want to recreate executor resources on GCP."
 }
+
+variable "use_local_ssd" {
+  type        = bool
+  default     = false
+  description = "Use a local SSD for the data dir of ignite."
+}

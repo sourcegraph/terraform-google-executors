@@ -26,6 +26,12 @@ variable "docker_mirror_boot_disk_size" {
   description = "Docker registry mirror node disk size in GB"
 }
 
+variable "docker_mirror_use_local_ssd" {
+  type        = bool
+  default     = false
+  description = "Use a local SSD for the data dir of the registry instead of a persistent disk. This will mean that the cache will reset after the instance is replaced! disk_size is also not honored when true."
+}
+
 variable "docker_mirror_http_access_cidr_ranges" {
   type        = list(string)
   default     = ["10.0.0.0/16"]
@@ -52,6 +58,12 @@ variable "executor_machine_type" {
   type        = string
   default     = "c2-standard-8" // 8 vCPU, 32GB
   description = "Executor node machine type"
+}
+
+variable "executor_use_local_ssd" {
+  type        = bool
+  default     = false
+  description = "Use a local SSD for the data dir of the registry instead of a persistent disk. This will mean that the cache will reset after the instance is replaced! disk_size is also not honored when true."
 }
 
 variable "executor_boot_disk_size" {

@@ -32,7 +32,7 @@ locals {
   }
 
   # if using local SSDs and using the default value of 100, lower it to 10, otherwise use the configured value either way.
-  boot_disk_size = var.use_local_ssd ? var.boot_disk_size == 100 ? 10 : var.boot_disk_size : var.boot_disk_size
+  boot_disk_size = var.use_local_ssd ? (var.boot_disk_size == 100 ? 10 : var.boot_disk_size) : var.boot_disk_size
 }
 
 # Fetch the google project set in the currently used provider.

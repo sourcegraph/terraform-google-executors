@@ -63,6 +63,13 @@ resource "google_compute_instance" "default" {
 
   allow_stopping_for_update = true
 
+  dynamic "scheduling" {
+    for_each = var.use_local_ssd ? [1] : []
+    content {
+      instance_termination_action = "DELETE"
+    }
+  }
+
   labels = local.resource_values.compute_instance.labels
 
   service_account {

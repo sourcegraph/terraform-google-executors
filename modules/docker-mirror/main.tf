@@ -91,7 +91,7 @@ resource "google_compute_instance" "default" {
   dynamic "attached_disk" {
     for_each = var.use_local_ssd ? [] : [1]
     content {
-      source      = google_compute_disk.0.registry-data.self_link
+      source      = google_compute_disk.registry-data[0].self_link
       device_name = "registry-data"
       mode        = "READ_WRITE"
     }

@@ -71,7 +71,7 @@ variable "sourcegraph_executor_proxy_password" {
 
 variable "queue_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "The single queue from which the executor should dequeue jobs. Either this or `queue_names` is required"
 }
 

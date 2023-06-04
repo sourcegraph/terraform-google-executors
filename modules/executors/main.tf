@@ -34,10 +34,10 @@ locals {
   # if using local SSDs and using the default value of 100, lower it to 10, otherwise use the configured value either way.
   boot_disk_size = var.use_local_ssd ? (var.boot_disk_size == 100 ? 10 : var.boot_disk_size) : var.boot_disk_size
 
-  queue_names      = var.queue_names != null ? join(",", var.queue_names) : null
+  queue_names      = var.queue_names != null ? join(",", var.queue_names) : ""
   // TODO: this is how the field is set in util.workerOptions when metrics are initialised.
   // Should be split into a queue/queues metric field
-  metric_queue_val = var.queue_name != null ? var.queue_name : replace(local.queue_names, ",", "_")
+  metric_queue_val = var.queue_name != "" ? var.queue_name : replace(local.queue_names, ",", "_")
 }
 
 # Fetch the google project set in the currently used provider.

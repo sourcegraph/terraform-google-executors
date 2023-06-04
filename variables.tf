@@ -103,6 +103,19 @@ variable "executor_sourcegraph_executor_proxy_password" {
 variable "executor_queue_name" {
   type        = string
   description = "The queue from which the executor should dequeue jobs"
+  validation {
+    condition = var.executor_queue_name != null && var.executor_queue_names == null
+    error_message = "One of 'queue_name' or 'queue_names' must be set, but only one at most."
+  }
+}
+
+variable "executor_queue_names" {
+  type        = list(string)
+  description = "The multiple queues from which the executor should dequeue jobs"
+  validation {
+    condition = var.executor_queue_names != null && var.executor_queue_name == null
+    error_message = "One of 'queue_names' or 'queue_name' must be set, but only one at most."
+  }
 }
 
 variable "executor_maximum_runtime_per_job" {

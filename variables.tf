@@ -109,7 +109,7 @@ variable "executor_queue_name" {
 variable "executor_queue_names" {
   type        = list(string)
   default     = null
-  description = "The multiple queues from which the executor should dequeue jobs, comma separated. Either this or `executor_queue_name` is required"
+  description = "The multiple queues from which the executor should dequeue jobs. Either this or `executor_queue_name` is required"
 }
 
 variable "executor_maximum_runtime_per_job" {

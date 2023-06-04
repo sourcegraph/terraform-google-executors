@@ -33,6 +33,11 @@ locals {
 
   # if using local SSDs and using the default value of 100, lower it to 10, otherwise use the configured value either way.
   boot_disk_size = var.use_local_ssd ? (var.boot_disk_size == 100 ? 10 : var.boot_disk_size) : var.boot_disk_size
+
+  queue_names      = var.queue_names != null ? join(",", var.queue_names) : null
+  // TODO: this is how the field is set in util.workerOptions when metrics are initialised.
+  // Should be split into a queue/queues metric field
+  metric_queue_val = var.queue_name != null ? var.queue_name : replace(local.queue_names, ",", "_")
 }
 
 # Fetch the google project set in the currently used provider.
@@ -135,7 +140,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
       "EXECUTOR_JOB_MEMORY"                 = var.job_memory != "" ? var.job_memory : var.firecracker_memory
       "EXECUTOR_FIRECRACKER_DISK_SPACE"     = var.firecracker_disk_space
       "EXECUTOR_QUEUE_NAME"                 = var.queue_name
-      "EXECUTOR_QUEUE_NAMES"                = var.queue_names
+      "EXECUTOR_QUEUE_NAMES"                = local.queue_names
       "EXECUTOR_MAXIMUM_RUNTIME_PER_JOB"    = var.maximum_runtime_per_job
       "EXECUTOR_NUM_TOTAL_JOBS"             = var.num_total_jobs
       "EXECUTOR_MAX_ACTIVE_TIME"            = var.max_active_time
@@ -176,12 +181,6 @@ resource "google_compute_instance_group_manager" "executor" {
       target_size
     ]
   }
-}
-
-locals {
-  // TODO: this is how the field is set in util.workerOptions when metrics are initialised.
-  // Should be split into a queue/queues metric field
-  metric_queue_val = var.queue_name != null ? var.queue_name : replace(var.queue_names, ",", "_")
 }
 
 resource "google_compute_autoscaler" "executor-autoscaler" {

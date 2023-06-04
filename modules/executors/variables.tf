@@ -72,21 +72,13 @@ variable "sourcegraph_executor_proxy_password" {
 variable "queue_name" {
   type        = string
   default     = null
-  description = "The single queue from which the executor should dequeue jobs"
-  validation {
-    condition     = var.queue_name != null && var.queue_names == null
-    error_message = "One of 'queue_name' or 'queue_names' must be set, but only one at most."
-  }
+  description = "The single queue from which the executor should dequeue jobs. Either this or `queue_names` is required"
 }
 
 variable "queue_names" {
   type        = list(string)
   default     = null
-  description = "The multiple queues from which the executor should dequeue jobs, comma separated"
-  validation {
-    condition     = var.queue_names != null && var.queue_name == null
-    error_message = "One of 'queue_names' or 'queue_name' must be set, but only one at most."
-  }
+  description = "The multiple queues from which the executor should dequeue jobs, comma separated. Either this or `queue_name` is required"
 }
 
 variable "maximum_runtime_per_job" {

@@ -87,7 +87,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
 
   # Grant access to logging and monitoring APIs.
   service_account {
-    email = google_service_account.sa.email
+    email  = google_service_account.sa.email
     scopes = [
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring.write",
@@ -135,6 +135,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
       "EXECUTOR_JOB_MEMORY"                 = var.job_memory != "" ? var.job_memory : var.firecracker_memory
       "EXECUTOR_FIRECRACKER_DISK_SPACE"     = var.firecracker_disk_space
       "EXECUTOR_QUEUE_NAME"                 = var.queue_name
+      "EXECUTOR_QUEUE_NAMES"                = var.queue_names
       "EXECUTOR_MAXIMUM_RUNTIME_PER_JOB"    = var.maximum_runtime_per_job
       "EXECUTOR_NUM_TOTAL_JOBS"             = var.num_total_jobs
       "EXECUTOR_MAX_ACTIVE_TIME"            = var.max_active_time
@@ -177,6 +178,12 @@ resource "google_compute_instance_group_manager" "executor" {
   }
 }
 
+locals {
+  // TODO: this is how the field is set in util.workerOptions when metrics are initialised.
+  // Should be split into a queue/queues metric field
+  metric_queue_val = var.queue_name != null ? var.queue_name : replace(var.queue_names, ",", "_")
+}
+
 resource "google_compute_autoscaler" "executor-autoscaler" {
   # Need to use the beta provider here, some fields are otherwise not supported.
   provider = google-beta
@@ -190,9 +197,9 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
     cooldown_period = 300
 
     metric {
-      name = "custom.googleapis.com/executors/queue/size"
+      name   = "custom.googleapis.com/executors/queue/size"
       # TODO: Isn't there an AND missing here?
-      filter = "resource.type = \"global\" metric.labels.queueName = \"${var.queue_name}\" AND metric.labels.environment = \"${var.metrics_environment_label}\""
+      filter = "resource.type = \"global\" metric.labels.queueName = \"${local.metric_queue_val}\" AND metric.labels.environment = \"${var.metrics_environment_label}\""
 
       # 1 instance per N queued jobs.
       single_instance_assignment = var.jobs_per_instance_scaling

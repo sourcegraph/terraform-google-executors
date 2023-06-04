@@ -82,7 +82,7 @@ variable "queue_name" {
 variable "queue_names" {
   type        = list(string)
   default     = null
-  description = "The multiple queues from which the executor should dequeue jobs"
+  description = "The multiple queues from which the executor should dequeue jobs, comma separated"
   validation {
     condition     = var.queue_names != null && var.queue_name == null
     error_message = "One of 'queue_names' or 'queue_name' must be set, but only one at most."

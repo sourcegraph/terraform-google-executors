@@ -34,7 +34,7 @@ locals {
   # if using local SSDs and using the default value of 100, lower it to 10, otherwise use the configured value either way.
   boot_disk_size = var.use_local_ssd ? (var.boot_disk_size == 100 ? 10 : var.boot_disk_size) : var.boot_disk_size
 
-  queue_names = var.queue_names != null ? join(",", var.queue_names) : ""
+  queue_names      = var.queue_names != null ? join(",", sort(var.queue_names)) : ""
   // TODO: this is how the field is set in util.workerOptions when metrics are initialised.
   // Should be split into a queue/queues metric field
   metric_queue_val = var.queue_name != "" ? var.queue_name : replace(local.queue_names, ",", "_")
@@ -92,7 +92,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
 
   # Grant access to logging and monitoring APIs.
   service_account {
-    email = google_service_account.sa.email
+    email  = google_service_account.sa.email
     scopes = [
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring.write",
@@ -196,7 +196,7 @@ resource "google_compute_autoscaler" "executor-autoscaler" {
     cooldown_period = 300
 
     metric {
-      name = "custom.googleapis.com/executors/queue/size"
+      name   = "custom.googleapis.com/executors/queue/size"
       # TODO: Isn't there an AND missing here?
       filter = "resource.type = \"global\" metric.labels.queueName = \"${local.metric_queue_val}\" AND metric.labels.environment = \"${var.metrics_environment_label}\""
 

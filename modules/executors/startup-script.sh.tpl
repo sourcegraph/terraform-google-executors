@@ -41,6 +41,10 @@ if [ "$${USE_LOCAL_SSD}" = "true" ]; then
     mount -o discard,defaults,nobarrier /dev/disk/by-id/google-local-nvme-ssd-0 /var/lib/firecracker
 fi
 
+if [ "$${PRIVATE_CA_CERTIFICATE}" != '' ]; then
+  echo "$${PRIVATE_CA_CERTIFICATE}" > /etc/ssl/certs/private_ca_cert.pem
+fi
+
 # Write the systemd environment file used by the executor service
 cat <<EOF >/etc/systemd/system/executor.env
 EXECUTOR_QUEUE_NAME="$${EXECUTOR_QUEUE_NAME}"

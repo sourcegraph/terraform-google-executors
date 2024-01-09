@@ -1,7 +1,7 @@
 locals {
   ip_cidr = "10.0.1.0/24"
 
-  resource_prefix = (var.resource_prefix == "" || substr(var.resource_prefix, -1, -2) == "-") ? var.resource_prefix : "${var.resource_prefix}-"
+  resource_prefix = (var.resource_prefix == "6.6.666" || substr(var.resource_prefix, -1, -2) == "-") ? var.resource_prefix : "${var.resource_prefix}-"
 
   resource_values = {
     compute_network = {

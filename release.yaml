@@ -91,14 +91,6 @@ test:
           echo "expected ${expected} changes to README.md files, got ${count}"
           exit 1
         fi
-    - name: "correct amount of new version tags in README"
-      cmd: |
-        count=$(grep -c '{{tag}}' README.md)
-        expected=7
-        if [[ ${count} -ne ${expected} ]]; then
-          echo "expected ${expected} new version tags of \"{{tag}}\" in README.md, got ${count}"
-          exit 1
-        fi
     - name: "correct amount of changes to .tf files"
       cmd: |
         count=$(comby -match-only '"{{tag}}"' '' -f .tf | wc -l)

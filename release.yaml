@@ -2,10 +2,8 @@
 meta:
   productName: "terraform-google-executors"
   owners:
-    - "sourcegraph"
+    - "@sourcegraph/release"
   repository: "github.com/sourcegraph/terraform-google-executors"
-  artifacts:
-    - "nothing"
 requirements:
   - name: "comby exists"
     cmd: "which comby"
@@ -13,7 +11,6 @@ requirements:
   - name: "GitHub cli exists"
     cmd: "which gh"
     fixInstructions: "install GitHub cli"
-# No internal steps since any release in this repo is public
 internal:
   create:
     steps:

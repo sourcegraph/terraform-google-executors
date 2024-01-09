@@ -27,7 +27,7 @@ internal:
           - name: "update links in READMEs"
             cmd: comby -in-place "$(cat prev_tag)" '{{tag}}' -f .md
           - name: "update version in examples"
-            cmd: comby "\"$(cat prev_tag)\"" '"{{tag}}"' -i -f .tf -exclude providers.tf
+            cmd: comby "\"$(cat prev_version)\"" '"{{tag}}"' -i -f .tf -exclude providers.tf
           - name: "update executors docker-mirror image name"
             cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' '"sourcegraph-executors-docker-mirror-$(cat family_tag)"' -i -f .tf
           - name: "update executors image name"

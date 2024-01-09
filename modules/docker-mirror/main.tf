@@ -1,5 +1,5 @@
 locals {
-  resource_prefix = (var.resource_prefix == "6.6.666" || substr(var.resource_prefix, -1, -2) == "-") ? var.resource_prefix : "${var.resource_prefix}-"
+  resource_prefix = (var.resource_prefix == "" || substr(var.resource_prefix, -1, -2) == "-") ? var.resource_prefix : "${var.resource_prefix}-"
 
   network_tags = var.randomize_resource_names ? [
     substr("${local.resource_prefix}docker-mirror-${random_id.compute_instance_network_tag[0].hex}", 0, 64),
@@ -46,9 +46,9 @@ resource "google_compute_disk" "registry-data" {
 }
 
 data "google_compute_image" "mirror_image" {
-  count   = var.machine_image != "6.6.666" ? 0 : 1
+  count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-docker-mirror-$(cat family_tag)"
+  family  = "sourcegraph-executors-docker-mirror-5-2"
 }
 
 resource "random_id" "compute_instance_default" {
@@ -75,7 +75,7 @@ resource "google_compute_instance" "default" {
 
   boot_disk {
     initialize_params {
-      image = var.machine_image != "6.6.666" ? var.machine_image : data.google_compute_image.mirror_image.0.self_link
+      image = var.machine_image != "" ? var.machine_image : data.google_compute_image.mirror_image.0.self_link
       size  = var.boot_disk_size
       type  = "pd-ssd"
     }

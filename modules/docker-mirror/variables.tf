@@ -15,7 +15,7 @@ variable "subnet_id" {
 
 variable "machine_image" {
   type        = string
-  default     = "6.6.666"
+  default     = ""
   description = "Docker registry mirror node machine disk image to use for creating the boot volume. Leave empty to use latest compatible with the Sourcegraph version."
 }
 
@@ -63,9 +63,9 @@ variable "assign_public_ip" {
 variable "resource_prefix" {
   type        = string
   description = "A string to prefix all resources with"
-  default     = "6.6.666"
+  default     = ""
   validation {
-    condition     = var.resource_prefix == "6.6.666" || can(regex("^[a-z].*", var.resource_prefix))
+    condition     = var.resource_prefix == "" || can(regex("^[a-z].*", var.resource_prefix))
     error_message = "The variable resource_prefix must start with a lowercase letter."
   }
 }

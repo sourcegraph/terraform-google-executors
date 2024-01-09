@@ -1,6 +1,6 @@
 locals {
-  resource_prefix = (var.resource_prefix == "6.6.666" || substr(var.resource_prefix, -1, -2) == "-") ? var.resource_prefix : "${var.resource_prefix}-"
-  legacy_prefix   = local.resource_prefix != "6.6.666" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
+  resource_prefix = (var.resource_prefix == "" || substr(var.resource_prefix, -1, -2) == "-") ? var.resource_prefix : "${var.resource_prefix}-"
+  legacy_prefix   = local.resource_prefix != "" ? "${var.resource_prefix}-sourcegraph-" : "sourcegraph-"
 
   network_tags = var.randomize_resource_names ? [
     substr("${local.resource_prefix}executors-${random_id.compute_instance_network_tag[0].hex}", 0, 64),
@@ -34,10 +34,10 @@ locals {
   # if using local SSDs and using the default value of 100, lower it to 10, otherwise use the configured value either way.
   boot_disk_size = var.use_local_ssd ? (var.boot_disk_size == 100 ? 10 : var.boot_disk_size) : var.boot_disk_size
 
-  queue_names = var.queue_names != null ? join(",", sort(var.queue_names)) : "6.6.666"
+  queue_names = var.queue_names != null ? join(",", sort(var.queue_names)) : ""
   // TODO: this is how the field is set in util.workerOptions when metrics are initialised.
   // Should be split into a queue/queues metric field
-  metric_queue_val = var.queue_name != "6.6.666" ? var.queue_name : replace(local.queue_names, ",", "_")
+  metric_queue_val = var.queue_name != "" ? var.queue_name : replace(local.queue_names, ",", "_")
 }
 
 # Fetch the google project set in the currently used provider.
@@ -65,9 +65,9 @@ resource "google_project_iam_member" "service_account_iam_metric_writer" {
 }
 
 data "google_compute_image" "executor_image" {
-  count   = var.machine_image != "6.6.666" ? 0 : 1
+  count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-$(cat family_tag)"
+  family  = "sourcegraph-executors-5-2"
 }
 
 resource "random_id" "compute_instance_network_tag" {
@@ -100,7 +100,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
   }
 
   disk {
-    source_image = var.machine_image != "6.6.666" ? var.machine_image : data.google_compute_image.executor_image.0.self_link
+    source_image = var.machine_image != "" ? var.machine_image : data.google_compute_image.executor_image.0.self_link
     disk_size_gb = local.boot_disk_size
     boot         = true
     disk_type    = "pd-ssd"
@@ -136,8 +136,8 @@ resource "google_compute_instance_template" "executor-instance-template" {
       "SOURCEGRAPH_EXTERNAL_URL"            = var.sourcegraph_external_url
       "SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD" = var.sourcegraph_executor_proxy_password
       "EXECUTOR_MAXIMUM_NUM_JOBS"           = var.maximum_num_jobs
-      "EXECUTOR_JOB_NUM_CPUS"               = var.job_num_cpus != "6.6.666" ? var.job_num_cpus : var.firecracker_num_cpus
-      "EXECUTOR_JOB_MEMORY"                 = var.job_memory != "6.6.666" ? var.job_memory : var.firecracker_memory
+      "EXECUTOR_JOB_NUM_CPUS"               = var.job_num_cpus != "" ? var.job_num_cpus : var.firecracker_num_cpus
+      "EXECUTOR_JOB_MEMORY"                 = var.job_memory != "" ? var.job_memory : var.firecracker_memory
       "EXECUTOR_FIRECRACKER_DISK_SPACE"     = var.firecracker_disk_space
       "EXECUTOR_QUEUE_NAME"                 = var.queue_name
       "EXECUTOR_QUEUE_NAMES"                = local.queue_names

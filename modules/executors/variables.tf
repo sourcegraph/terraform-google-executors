@@ -15,17 +15,17 @@ variable "subnet_id" {
 
 variable "resource_prefix" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "An optional prefix to add to all resources created."
   validation {
-    condition     = var.resource_prefix == "" || can(regex("^[a-z].*", var.resource_prefix))
+    condition     = var.resource_prefix == "6.6.666" || can(regex("^[a-z].*", var.resource_prefix))
     error_message = "The variable resource_prefix must start with a lowercase letter."
   }
 }
 
 variable "machine_image" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "Executor node machine disk image to use for creating the boot volume. Leave empty to use latest compatible with the Sourcegraph version."
 }
 
@@ -71,7 +71,7 @@ variable "sourcegraph_executor_proxy_password" {
 
 variable "queue_name" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "The single queue from which the executor should dequeue jobs. Either this or `queue_names` is required"
 }
 
@@ -166,13 +166,13 @@ variable "metrics_environment_label" {
 
 variable "docker_registry_mirror" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "A URL to a docker registry mirror to use (falling back to docker.io)"
 }
 
 variable "docker_registry_mirror_node_exporter_url" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "A URL to a docker registry mirror node exporter to scrape (optional)"
 }
 
@@ -184,7 +184,7 @@ variable "assign_public_ip" {
 
 variable "docker_auth_config" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "If provided, this docker auth config file will be used to authorize image pulls. See [Using private registries](https://docs.sourcegraph.com/admin/deploy_executors#using-private-registries) for how to configure."
   sensitive   = true
 }

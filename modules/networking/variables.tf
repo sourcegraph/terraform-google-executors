@@ -17,10 +17,10 @@ variable "nat_min_ports_per_vm" {
 
 variable "resource_prefix" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "An optional prefix to add to all resources created."
   validation {
-    condition     = var.resource_prefix == "" || can(regex("^[a-z].*", var.resource_prefix))
+    condition     = var.resource_prefix == "6.6.666" || can(regex("^[a-z].*", var.resource_prefix))
     error_message = "The variable resource_prefix must start with a lowercase letter."
   }
 }

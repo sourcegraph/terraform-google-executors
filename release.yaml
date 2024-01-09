@@ -111,7 +111,7 @@ test:
       cmd: |
         echo "{{tag}}" | grep -o -E "[[:digit:]]+\.[[:digit:]]+" | sed 's/\./-/' > family_tag
         trap "rm family_tag" EXIT
-        count=$(comby -match-only '"sourcegraph-executors-docker-mirror-$(cat family_tag)"' '' -f .tf | wc -l)
+        count=$(comby -match-only "\"sourcegraph-executors-docker-mirror-$(cat family_tag)\"" '' -f .tf | wc -l)
         expected=1
         if [[ ${count} -ne ${expected} ]]; then
           echo "expected ${expected} .tf files to be updated with \"sourcegraph-executors-docker-mirror-$(family_tag)\" but got ${count}"
@@ -121,7 +121,7 @@ test:
       cmd: |
         echo "{{tag}}" | grep -o -E "[[:digit:]]+\.[[:digit:]]+" | sed 's/\./-/' > family_tag
         trap "rm family_tag" EXIT
-        count=$(comby -match-only '"sourcegraph-executors-$(cat family_tag)"' '' -f .tf | wc -l)
+        count=$(comby -match-only "\"sourcegraph-executors-$(cat family_tag)\"" '' -f .tf | wc -l)
         expected=1
         if [[ ${count} -ne ${expected} ]]; then
           echo "expected ${expected} .tf files to be updated with \"sourcegraph-executors-$(cat family_tag)\" but got ${count}"

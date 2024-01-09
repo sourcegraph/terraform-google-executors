@@ -38,11 +38,6 @@ internal:
               branch="wb/wip_{{version}}"
               git switch -c "${branch}"
               git commit -am 'release-minor: {{version}}' -m '{{config}}'
-          - name: "git:push"
-            cmd: git push origin wb/wip_{{version}}
-          - name: "GitHub:create PR"
-            cmd: |
-              gh pr create -f -t "PRETEND RELEASE - release-minor: build {{version}}"
       major:
           - name: generate required files for release process
             cmd: |

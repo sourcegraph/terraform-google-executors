@@ -29,9 +29,9 @@ internal:
           - name: "update version in examples"
             cmd: comby "\"$(cat prev_tag)\"" '"{{tag}}"' -i -f .tf -exclude providers.tf
           - name: "update executors docker-mirror image name"
-            cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' '"sourcegraph-executors-docker-mirror-$(cat family_tag)"' -i -f .tf
+            cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' "\"sourcegraph-executors-docker-mirror-$(cat family_tag)\"" -i -f .tf
           - name: "update executors image name"
-            cmd: comby '"sourcegraph-executors-:[~\d+-\d+]"' '"sourcegraph-executors-$(cat family_tag)"' -i -f .tf
+            cmd: comby '"sourcegraph-executors-:[~\d+-\d+]"' "\"sourcegraph-executors-$(cat family_tag)\"" -i -f .tf
           - name: "remove generated files"
             cmd: |
               rm -vf family_tag
@@ -58,9 +58,9 @@ internal:
           - name: "update version in examples"
             cmd: comby "\"$(cat prev_tag)\"" '"{{tag}}"' -i -f .tf -exclude providers.tf
           - name: "update executors docker-mirror image name"
-            cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' '"sourcegraph-executors-docker-mirror-$(cat family_tag)"' -i -f .tf
+            cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' "\"sourcegraph-executors-docker-mirror-$(cat family_tag)\"" -i -f .tf
           - name: "update executors image name"
-            cmd: comby '"sourcegraph-executors-:[~\d+-\d+]"' '"sourcegraph-executors-$(cat family_tag)"' -i -f .tf
+            cmd: comby '"sourcegraph-executors-:[~\d+-\d+]"' "\"sourcegraph-executors-$(cat family_tag)\"" -i -f .tf
           - name: "remove generated file with image tag"
             cmd: rm -f family_tag
           - name: "remove generated files"
@@ -145,9 +145,9 @@ promoteToPublic:
       - name: "update version in examples"
         cmd: comby "\"$(cat prev_tag)\"" '"{{tag}}"' -i -f .tf -exclude providers.tf
       - name: "update executors docker-mirror image name"
-        cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' '"sourcegraph-executors-docker-mirror-$(cat family_tag)"' -i -f .tf
+        cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' "\"sourcegraph-executors-docker-mirror-$(cat family_tag)\"" -i -f .tf
       - name: "update executors image name"
-        cmd: comby '"sourcegraph-executors-:[~\d+-\d+]"' '"sourcegraph-executors-$(cat family_tag)"' -i -f .tf
+        cmd: comby '"sourcegraph-executors-:[~\d+-\d+]"' "\"sourcegraph-executors-$(cat family_tag)\"" -i -f .tf
       - name: "remove generated files"
         cmd: |
           rm -vf family_tag

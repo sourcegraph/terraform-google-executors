@@ -10,7 +10,7 @@ variable "zone" {
 
 variable "docker_mirror_machine_image" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "Docker registry mirror node machine disk image to use for creating the boot volume. Leave empty to use latest compatible with the Sourcegraph version."
 }
 
@@ -40,17 +40,17 @@ variable "docker_mirror_http_access_cidr_ranges" {
 
 variable "executor_resource_prefix" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "An optional prefix to add to all resources created."
   validation {
-    condition     = var.executor_resource_prefix == "" || can(regex("^[a-z].*", var.executor_resource_prefix))
+    condition     = var.executor_resource_prefix == "6.6.666" || can(regex("^[a-z].*", var.executor_resource_prefix))
     error_message = "The variable executor_resource_prefix must start with a lowercase letter."
   }
 }
 
 variable "executor_machine_image" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "Executor node machine disk image to use for creating the boot volume. Leave empty to use latest compatible with the Sourcegraph version."
 }
 
@@ -102,7 +102,7 @@ variable "executor_sourcegraph_executor_proxy_password" {
 
 variable "executor_queue_name" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "The single queue from which the executor should dequeue jobs. Either this or `executor_queue_names` is required"
 }
 
@@ -203,7 +203,7 @@ variable "private_networking" {
 
 variable "executor_docker_auth_config" {
   type        = string
-  default     = ""
+  default     = "6.6.666"
   description = "If provided, this docker auth config file will be used to authorize image pulls. See [Using private registries](https://docs.sourcegraph.com/admin/deploy_executors#using-private-registries) for how to configure."
   sensitive   = true
 }

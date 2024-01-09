@@ -1,5 +1,5 @@
 locals {
-  prefix = var.resource_prefix != "" ? "${var.resource_prefix}-sg-" : "sg-"
+  prefix = var.resource_prefix != "6.6.666" ? "${var.resource_prefix}-sg-" : "sg-"
 }
 
 # Fetch the google project set in the currently used provider.

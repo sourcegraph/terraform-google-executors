@@ -69,15 +69,15 @@ internal:
               branch="wb/wip_{{version}}"
               git switch -c "${branch}"
               git commit -am 'release-major: {{version}}' -m '{{config}}'
-          - name: "git:push"
-            cmd: git push origin wb/wip_{{version}}
-          - name: "GitHub:create PR"
-            cmd: |
-              gh pr create -f -t "PRETEND RELEASE - release-major: build {{version}}"
   finalize:
     steps:
       - name: "git:finalize"
         cmd: |
+          git checkout wb/wip_{{version}}
+          git push origin wb/wip_{{version}}
+
+          gh pr create -f -t "PRETEND RELEASE - release-major: build {{version}}"
+
           git switch -c "wb/release-{{version}}"
           git push origin wb/release-{{version}}
           git checkout -

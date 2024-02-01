@@ -43,7 +43,8 @@ steps:
       tar zxf sg-rfc795.tar.gz
       chmod +x ./sg-rfc795
 
-      PATH=$PATH:$(pwd) ./sg-rfc795 release run internal finalize --workdir=. --config-from-commit
+      export PATH=$PATH:$(pwd)
+      ./sg-rfc795 release run internal finalize --workdir=. --config-from-commit
   - label: "Promote to public: finalize"
     if: build.message =~ /^promote_release/ && build.branch =~ /^wip-release/
     command: |
@@ -54,4 +55,5 @@ steps:
       tar zxf sg-rfc795.tar.gz
       chmod +x ./sg-rfc795
 
-      PATH=$PATH:$(pwd) ./sg-rfc795 release run promote-to-public finalize --workdir=. --config-from-commit
+      export PATH=$PATH:$(pwd)
+      ./sg-rfc795 release run promote-to-public finalize --workdir=. --config-from-commit

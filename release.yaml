@@ -15,7 +15,7 @@ internal:
   create:
     steps:
       minor:
-          - name: git:prev_tag
+          - name: "git:prev_tag"
             cmd: |
               # get previous tag we need to replace
               git describe --tags "$(git rev-list --tags --max-count=1)" | sed 's/v//' > prev_tag
@@ -41,7 +41,7 @@ internal:
               git push origin ${branch}
           - name: "gh"
             cmd: |
-              gh pr create -f -t "PRETEND RELEASE WIP: release_major: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
+              gh pr create -f -t "PRETEND RELEASE WIP: release_minor: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
       major:
           - name: git:prev_tag
             cmd: |
@@ -149,10 +149,10 @@ promoteToPublic:
       - name: "gh"
         cmd: |
           set -e
-          branch="wip-release-{{version}}"
-          # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
-          git fetch origin "${branch}"
-          gh pr create -f -t "PRETEND PROMOTE RELEASE - release: build {{version}}" --base "${branch}" --body "Test plan: automated release PR, CI will perform additional checks"
+          remote_branch="wip-release-{{version}}"
+          # we need to fetch from origin just in case this remote_branch doesn't exist locally, so that the PR can find the base
+          git fetch origin "${remote_branch}"
+          gh pr create -f -t "PRETEND PROMOTE RELEASE - release: build {{version}}" --base "${remote_branch}" --body "Test plan: automated release PR, CI will perform additional checks"
   finalize:
     steps:
       - name: git:tag

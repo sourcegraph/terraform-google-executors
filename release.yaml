@@ -35,7 +35,7 @@ internal:
               rm -vf prev_tag
           - name: "git:branch"
             cmd: |
-              branch="wb/wip_{{version}}"
+              branch="wip_{{version}}"
               git switch -c "${branch}"
               git commit -am 'release-minor: {{version}}' -m '{{config}}'
               git push origin ${branch}
@@ -63,7 +63,7 @@ internal:
               rm -vf prev_tag
           - name: "git:branch"
             cmd: |
-              branch="wb/wip_{{version}}"
+              branch="wip_{{version}}"
               git switch -c "${branch}"
               git commit -am 'release-major: {{version}}' -m '{{config}}'
               git push origin ${branch}

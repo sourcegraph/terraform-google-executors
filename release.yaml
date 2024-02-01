@@ -4,6 +4,8 @@ meta:
   owners:
     - "@sourcegraph/release"
   repository: "github.com/sourcegraph/terraform-google-executors"
+inputs:
+  releaseId: server
 requirements:
   - name: "comby exists"
     cmd: "which comby"

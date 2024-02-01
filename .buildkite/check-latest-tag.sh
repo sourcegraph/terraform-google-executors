@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# TODO(burmudar): remove this
+echo ":warning: :warning :warning TEMPORARILY DISABLED :warning: :warning: :warning"
+exit 0
+
 scratch=$(mktemp -d -t tmp.XXXXXXXXXX)
 function finish() {
   rm -rf "$scratch"

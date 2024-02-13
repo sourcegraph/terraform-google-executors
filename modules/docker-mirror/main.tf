@@ -48,7 +48,7 @@ resource "google_compute_disk" "registry-data" {
 data "google_compute_image" "mirror_image" {
   count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-docker-mirror-5-2"
+  family  = "sourcegraph-executors-docker-mirror-5-3"
 }
 
 resource "random_id" "compute_instance_default" {
@@ -153,7 +153,7 @@ resource "google_compute_firewall" "ssh" {
   target_tags = local.resource_values.compute_firewall.target_tags
 
   # Google IAP source range.
-  source_ranges = ["35.235.240.0/20"]
+  source_ranges = ["35.235.3.0.0/20"]
 
   # Expose port 22 for access to SSH.
   allow {

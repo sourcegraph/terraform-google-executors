@@ -67,7 +67,7 @@ resource "google_project_iam_member" "service_account_iam_metric_writer" {
 data "google_compute_image" "executor_image" {
   count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-5-2"
+  family  = "sourcegraph-executors-5-3"
 }
 
 resource "random_id" "compute_instance_network_tag" {
@@ -216,7 +216,7 @@ resource "google_compute_firewall" "executor-ssh-access" {
   target_tags = local.resource_values.compute_firewall.target_tags
 
   # Google IAP source range.
-  source_ranges = ["35.235.240.0/20"]
+  source_ranges = ["35.235.3.0.0/20"]
 
   allow {
     protocol = "tcp"

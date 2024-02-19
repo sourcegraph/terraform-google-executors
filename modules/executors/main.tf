@@ -216,7 +216,7 @@ resource "google_compute_firewall" "executor-ssh-access" {
   target_tags = local.resource_values.compute_firewall.target_tags
 
   # Google IAP source range.
-  source_ranges = ["35.235.3.0.0/20"]
+  source_ranges = ["35.235.240.0/20"]
 
   allow {
     protocol = "tcp"

@@ -150,7 +150,7 @@ test:
         echo "{{tag}}" | grep -o -E "[[:digit:]]+\.[[:digit:]]+" | sed 's/\./-/' > family_tag
         trap "rm family_tag" EXIT
 
-        current_branch=$(git rev-parse --abbrev-ref HEAD)
+        current_branch="${BUILDKITE_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}"
 
         family_regex="\"sourcegraph-executors-internal-docker-mirror-$(cat family_tag)\""
         if [[ $current_branch =~ "(promote|release)\/.*" ]]; then
@@ -170,7 +170,7 @@ test:
         echo "{{tag}}" | grep -o -E "[[:digit:]]+\.[[:digit:]]+" | sed 's/\./-/' > family_tag
         trap "rm family_tag" EXIT
 
-        current_branch=$(git rev-parse --abbrev-ref HEAD)
+        current_branch="${BUILDKITE_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}"
 
         family_regex="\"sourcegraph-executors-internal-$(cat family_tag)\""
         if [[ $current_branch =~ "(promote|release)\/.*" ]]; then

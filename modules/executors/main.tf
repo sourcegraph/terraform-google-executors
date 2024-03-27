@@ -67,7 +67,7 @@ resource "google_project_iam_member" "service_account_iam_metric_writer" {
 data "google_compute_image" "executor_image" {
   count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-internal-5-3"
+  family  = "sourcegraph-executors-5-3"
 }
 
 resource "random_id" "compute_instance_network_tag" {

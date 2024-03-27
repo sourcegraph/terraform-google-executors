@@ -172,9 +172,9 @@ promoteToPublic:
           git switch "${branch}"
       # Since we're promoting to public we need to remove the "internal" from the family
       - name: "family(name):docker-mirror"
-        cmd: comby '["sourcegraph-executors-internal-docker-mirror-:[family_tag_hole~\d+-\d+]"]' "[\"sourcegraph-executors-docker-mirror-:[family_tag_hole]\"]" -i -f .tf
+        cmd: comby '"sourcegraph-executors-internal-docker-mirror-:[family_tag_hole~\d+-\d+]"' '"sourcegraph-executors-docker-mirror-:[family_tag_hole]"' -i -f .tf
       - name: "family(name):sourcegraph"
-        cmd: comby '["sourcegraph-executors-internal-:[family_tag_hole~\d+-\d+]"]' "[\"sourcegraph-executors-:[family_tag_hole]\"]" -i -f .tf
+        cmd: comby '"sourcegraph-executors-internal-:[family_tag_hole~\d+-\d+]"' '"sourcegraph-executors-:[family_tag_hole]"' -i -f .tf
       - name: "git:branch"
         cmd: |
           set -eu
@@ -184,8 +184,6 @@ promoteToPublic:
         cmd: |
           set -eu
           branch="promote/release-{{version}}"
-          find . -name "*.yaml" | xargs git add
-          find . -name "*.yml" | xargs git add
 
           # Careful with the quoting for the config, using double quotes will lead
           # to the shell dropping out all quotes from the json, leading to failed
@@ -217,7 +215,7 @@ promoteToPublic:
           # Create the final branch holding the tagged commit
           git checkout "${promote_branch}"
           git switch -c "${release_branch}"
-          git tag {{version}}
+          # git tag {{version}}
           git push origin ${release_branch} --tags
 
           # Web URL to the tag

@@ -153,7 +153,7 @@ test:
         current_branch="${BUILDKITE_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}"
 
         family_regex="\"sourcegraph-executors-internal-docker-mirror-$(cat family_tag)\""
-        if [[ $current_branch =~ "(promote|release)\/.*" ]]; then
+        if [[ $current_branch =~ "^(promote|release)/.*" ]]; then
           family_regex="sourcegraph-executors-docker-mirror-$(cat family_tag)"
         fi
 
@@ -173,7 +173,7 @@ test:
         current_branch="${BUILDKITE_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}"
 
         family_regex="\"sourcegraph-executors-internal-$(cat family_tag)\""
-        if [[ $current_branch =~ "(promote|release)\/.*" ]]; then
+        if [[ $current_branch =~ "^(promote|release)/.*" ]]; then
           family_regex="sourcegraph-executors-$(cat family_tag)"
         fi
 

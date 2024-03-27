@@ -28,9 +28,9 @@ internal:
           - name: "files(tf)"
             cmd: comby "\"$(cat prev_tag)\"" '"{{tag}}"' -i -f .tf -exclude providers.tf
           - name: "family(name):docker-mirror"
-            cmd: comby '"sourcegraph-executors-internal-docker-mirror-:[~\d+-\d+]"' "\"sourcegraph-executors-docker-mirror-$(cat family_tag)\"" -i -f .tf
+            cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' "\"sourcegraph-executors-internal-docker-mirror-$(cat family_tag)\"" -i -f .tf
           - name: "family(name):sourcegraph-executors"
-            cmd: comby '"sourcegraph-executors-internal:[~\d+-\d+]"' "\"sourcegraph-executors-$(cat family_tag)\"" -i -f .tf
+            cmd: comby '"sourcegraph-executors-:[~\d+-\d+]"' "\"sourcegraph-executors-internal-$(cat family_tag)\"" -i -f .tf
           - name: "cleanup"
             cmd: |
               rm -vf family_tag
@@ -72,9 +72,9 @@ internal:
           - name: "files(tf)"
             cmd: comby "\"$(cat prev_tag)\"" '"{{tag}}"' -i -f .tf -exclude providers.tf
           - name: "family(name):docker-mirror"
-            cmd: comby '"sourcegraph-executors-internal-docker-mirror-:[~\d+-\d+]"' "\"sourcegraph-executors-docker-mirror-$(cat family_tag)\"" -i -f .tf
+            cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' "\"sourcegraph-executors-internal-docker-mirror-$(cat family_tag)\"" -i -f .tf
           - name: "family(name):sourcegraph-executors"
-            cmd: comby '"sourcegraph-executors-internal:[~\d+-\d+]"' "\"sourcegraph-executors-$(cat family_tag)\"" -i -f .tf
+            cmd: comby '"sourcegraph-executors-:[~\d+-\d+]"' "\"sourcegraph-executors-internal-$(cat family_tag)\"" -i -f .tf
           - name: "cleanup"
             cmd: |
               rm -vf family_tag

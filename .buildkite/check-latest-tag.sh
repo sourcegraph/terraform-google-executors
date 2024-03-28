@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-echo "--- Skipping for Release QA"
-exit 0
-
 scratch=$(mktemp -d -t tmp.XXXXXXXXXX)
 function finish() {
   rm -rf "$scratch"

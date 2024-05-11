@@ -147,6 +147,7 @@ resource "google_compute_instance_template" "executor-instance-template" {
       "EXECUTOR_USE_FIRECRACKER"            = var.use_firecracker
       "EXECUTOR_DOCKER_AUTH_CONFIG"         = var.docker_auth_config
       "USE_LOCAL_SSD"                       = var.use_local_ssd
+      "PRIVATE_CA_CERTIFICATE"              = var.private_ca_cert_path != "" ? file(var.private_ca_cert_path) : ""
     }
   })
 

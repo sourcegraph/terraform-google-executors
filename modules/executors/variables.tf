@@ -206,3 +206,9 @@ variable "use_local_ssd" {
   default     = false
   description = "Use a local SSD for the data dir of ignite."
 }
+
+variable "private_ca_cert_path" {
+  type        = string
+  default     = ""
+  description = "Path to the private CA certificate file"
+}

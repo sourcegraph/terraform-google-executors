@@ -58,4 +58,5 @@ module "gcp-executors" {
   assign_public_ip                         = var.private_networking ? false : true
   docker_auth_config                       = var.executor_docker_auth_config
   use_local_ssd                            = var.executor_use_local_ssd
+  private_ca_cert_path                     = var.private_ca_cert_path
 }

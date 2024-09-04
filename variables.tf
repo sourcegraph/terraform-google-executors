@@ -213,3 +213,9 @@ variable "randomize_resource_names" {
   type        = bool
   description = "Use randomized names for resources. Disable if you are upgrading existing executors that were deployed using the legacy naming conventions, unless you want to recreate executor resources on GCP."
 }
+
+variable "private_ca_cert_path" {
+  type        = string
+  default     = ""
+  description = "Path to the private CA certificate file"
+}

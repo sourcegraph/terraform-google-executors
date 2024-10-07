@@ -45,7 +45,7 @@ fi
 
 echo "Retrieving latest tag..."
 git fetch
-latest_tag=$(git describe --tags --abbrev=0 | tr -d '\n' | cut -c2-)
+latest_tag="5.6.0"
 
 branch="release/prepare-$new_tag"
 echo "Creating branch $branch..."
@@ -63,11 +63,11 @@ case $os in
     ;;
   'Darwin')
     echo "Updating links in READMEs..."
-    find . -type f -iname "*.md" -exec sed -i '' "s/$latest_tag/$new_tag/g" {} +
+    find . -type f -iname "*.md" -exec gsed -i -e "s/$latest_tag/$new_tag/g" {} +
     echo "Updating version in './examples..."
-    find . -type f -iname "*.tf" -exec sed -i '' "s/$latest_tag/$new_tag/g" {} +
+    find . -type f -iname "*.tf" -exec gsed -i -e "s/$latest_tag/$new_tag/g" {} +
     echo "Updating version in modules..."
-    find . -type f -iname "*.tf" -exec sed -i '' "s/$(get_modified_tag "$latest_tag")/$(get_modified_tag "$new_tag")/g" {} +
+    find . -type f -iname "*.tf" -exec gsed -i -e "s/$(get_modified_tag "$latest_tag")/$(get_modified_tag "$new_tag")/g" {} +
     ;;
   *)
     echo "Only Mac and Linux are supported"

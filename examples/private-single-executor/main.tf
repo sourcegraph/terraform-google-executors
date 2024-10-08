@@ -1,6 +1,6 @@
 module "executors" {
   source  = "sourcegraph/executors/google"
-  version = "5.8.0" # LATEST
+  version = "5.8.1" # LATEST
 
   region                                       = local.region
   zone                                         = local.zone

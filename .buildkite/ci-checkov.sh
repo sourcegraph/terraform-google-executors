@@ -5,6 +5,7 @@ set -euxo pipefail
 # Install and run the plugin for checkov
 # Use the full path to run pip3.10
 pipx install checkov
+pipx ensurepath
 
 # List of checks we do not want to run here
 # This is a living list and will see additions and mostly removals over time.

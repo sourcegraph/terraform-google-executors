@@ -24,7 +24,7 @@ echo "==========================================================================
 # Set not to fail on non-zero exit code
 set +e
 # Run checkov
-python3 -m checkov.main --skip-check $SKIP_CHECKS --quiet --framework terraform --compact -d .
+checkov --skip-check $SKIP_CHECKS --quiet --framework terraform --compact -d .
 
 # Options
 # --quiet: Only show failing tests

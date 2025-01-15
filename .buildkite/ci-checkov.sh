@@ -2,12 +2,9 @@
 # Set this to fail on the install
 set -euxo pipefail
 
-export PATH=$PATH:/root/.local/share/mise/installs
-
 # Install and run the plugin for checkov
-
-eval "$(mise activate bash)"
-mise install checkov
+# Use the full path to run pip3.10
+pipx install checkov
 
 # List of checks we do not want to run here
 # This is a living list and will see additions and mostly removals over time.

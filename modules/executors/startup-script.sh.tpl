@@ -11,6 +11,9 @@ DOCKER_REGISTRY_NODE_EXPORTER_URL_LINE=''
 
 export EXECUTOR_DOCKER_REGISTRY_MIRROR_URL="https://mirror.gcr.io"
 
+# Ensure the stored iptables rules are loaded:
+iptables-restore </etc/iptables/rules.v4
+
 # If a docker registry mirror is configured, create a startup script
 # that will configure docker to use the mirror. This requires writing
 # a docker configuration file and restarting the service.

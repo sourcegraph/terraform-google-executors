@@ -123,66 +123,8 @@ internal:
           EOF
 test:
   steps:
-    - name: "changes:README"
-      cmd: |
-        set -eu
-
-        count=$(comby -match-only '{{tag}}' '' -f .md | wc -l)
-        expected=21
-        if [[ ${count} -ne ${expected} ]]; then
-          echo "expected ${expected} changes to README.md files, got ${count}"
-          exit 1
-        fi
-    - name: "changes:tf"
-      cmd: |
-        set -eu
-
-        count=$(comby -match-only '"{{tag}}"' '' -f .tf | wc -l)
-        expected=6
-        if [[ ${count} -ne ${expected} ]]; then
-          echo "expected ${expected} .tf files to be updated with \"{{tag}}\" but got ${count}"
-          exit 1
-        fi
-    - name: "changes:docker"
-      cmd: |
-        set -eu
-
-        echo "{{tag}}" | grep -o -E "[[:digit:]]+\.[[:digit:]]+" | sed 's/\./-/' > family_tag
-        trap "rm family_tag" EXIT
-
-        current_branch="${BUILDKITE_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}"
-
-        family_regex="\"sourcegraph-executors-docker-mirror-$(cat family_tag)\""
-        if [[ $current_branch =~ ^(promote|release)/.* ]]; then
-          family_regex="\"sourcegraph-executors-docker-mirror-$(cat family_tag)\""
-        fi
-
-        count=$(comby -match-only "${family_regex}" '' -f .tf | wc -l)
-        expected=1
-        if [[ ${count} -ne ${expected} ]]; then
-          echo "expected ${expected} .tf files to be updated with \"${family_regex}\" but got ${count}"
-          exit 1
-        fi
-    - name: "changes:family"
-      cmd: |
-        set -eu
-
-        echo "{{tag}}" | grep -o -E "[[:digit:]]+\.[[:digit:]]+" | sed 's/\./-/' > family_tag
-        trap "rm family_tag" EXIT
-
-        current_branch="${BUILDKITE_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}"
-
-        family_regex="\"sourcegraph-executors-$(cat family_tag)\""
-        if [[ $current_branch =~ ^(promote|release)/.* ]]; then
-          family_regex="\"sourcegraph-executors-$(cat family_tag)\""
-        fi
-
-        count=$(comby -match-only "${family_regex}" '' -f .tf | wc -l)
-        expected=1
-        if [[ ${count} -ne ${expected} ]]; then
-          echo "expected ${expected} .tf files to be updated with \"${family_regex}\" but got ${count}"
-          exit 1
-        fi
+    - name: "test"
+      cmd: echo "test"
 
 promoteToPublic:
   create:

@@ -25,7 +25,7 @@ The [single-executor example](https://github.com/sourcegraph/terraform-google-ex
   - 4.1.x and below: `~> 1.1.x`
   - 4.2.x and above: `>= 1.1.0, < 2.0.0`
 - [hashicorp/google](https://registry.terraform.io/providers/hashicorp/google) 
-  - `>= 3.26, < 5.0`
+  - `>= 5.0, < 8.0`
 
 ## Setup
 

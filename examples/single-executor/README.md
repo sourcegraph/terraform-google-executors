@@ -13,3 +13,5 @@ The following variables must be supplied:
 - `executor_instance_tag`: Compute instances are tagged by this value by the key `executor_tag`. We recommend this value take the form `{executor_queue_name}-{executor_metrics_environment_label}`. This value must be the same as `INSTANCE_TAG` as described in [Configuring observability](https://docs.sourcegraph.com/admin/deploy_executors#google-1).
 
 All of this module's variables are defined in [variables.tf](https://github.com/sourcegraph/terraform-google-executors/blob/v7.6.0/variables.tf).
+
+This example uses the root module defaults: a `c2-standard-8` instance, up to 2 concurrent jobs, and per-job limits of 4 vCPUs, 12 GB of memory, and 20 GB of Firecracker disk space. `c2-standard-8` is not required: you can use any amd64 GCE machine type that meets [Sourcegraph's KVM requirements](https://sourcegraph.com/docs/self-hosted/executors/deploy-executors-binary#dependencies) and supports Google Cloud nested virtualization. Review the [executor sizing guidance](../../README.md#sizing-executor-instances) and adjust these values for your workload before deploying.

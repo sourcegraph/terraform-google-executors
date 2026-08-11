@@ -57,7 +57,7 @@ variable "executor_machine_image" {
 variable "executor_machine_type" {
   type        = string
   default     = "c2-standard-8" // 8 vCPU, 32GB
-  description = "Executor node machine type"
+  description = "Executor GCE machine type. When using Firecracker, use an amd64 machine type supported by Google Cloud nested virtualization with nested virtualization enabled and /dev/kvm available. See [Sourcegraph's executor requirements](https://sourcegraph.com/docs/self-hosted/executors/deploy-executors-binary#dependencies)."
 }
 
 variable "executor_use_local_ssd" {

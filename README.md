@@ -32,6 +32,24 @@ The [single-executor example](https://github.com/sourcegraph/terraform-google-ex
 Please follow our [setup guide](https://sourcegraph.com/docs/admin/executors/deploy_executors_terraform) on how to deploy
 executors using Terraform.
 
+## Sizing executor instances
+
+The root module uses `executor_machine_type` to select the GCE machine type and defaults to `c2-standard-8` (8 vCPUs and 32 GB of memory). `c2-standard-8` is not required: you can use any machine type that meets the isolation requirements below. Choose its size based on per-job resources, concurrency, and measured workload, as described in Sourcegraph's [executor capacity guidance](https://sourcegraph.com/docs/self-hosted/executors/resource-sizing).
+
+When using Firecracker, executors require an amd64 machine with KVM available at `/dev/kvm`. On Google Cloud, use a machine type that supports [nested virtualization](https://cloud.google.com/compute/docs/instances/nested-virtualization/overview). As of August 2026, Google Cloud does not support nested virtualization on E2, memory-optimized, AMD- or Arm-powered, or H4D VMs. Check that the selected machine type is supported in the executor's zone.
+
+The default Sourcegraph executor image enables nested virtualization through Google Cloud's `enable-vmx` image license. If you set `executor_machine_image`, ensure the custom image includes the same [nested virtualization license](https://cloud.google.com/compute/docs/instances/nested-virtualization/enabling) and exposes `/dev/kvm`; selecting a compatible machine type alone does not enable it. If `executor_use_firecracker` is `false`, KVM is not required.
+
+As a starting estimate, calculate instance capacity from the maximum concurrent jobs and per-job limits:
+
+- vCPUs: `executor_maximum_num_jobs * executor_job_num_cpus`
+- memory: `executor_maximum_num_jobs * executor_job_memory`
+- Firecracker job disk: `executor_maximum_num_jobs * executor_firecracker_disk_space`
+
+The defaults allow up to 2 concurrent jobs with limits of 4 vCPUs, 12 GB of memory, and 20 GB of Firecracker disk per job. This gives starting estimates of 8 vCPUs, 24 GB of memory, and 40 GB of job disk, plus capacity for the operating system, executor, and container runtime. These limits are not resource reservations, so tune them and any overcommit based on observed workloads. `executor_job_num_cpus` must be 1 or an even number when Firecracker is enabled, and `executor_firecracker_disk_space` must be a valid data size. The root module's `executor_boot_disk_size` defaults to 100 GB.
+
+If you use the `executors` submodule directly, use the corresponding unprefixed variables: `machine_type`, `machine_image`, `maximum_num_jobs`, `job_num_cpus`, `job_memory`, `firecracker_disk_space`, `use_firecracker`, and `boot_disk_size`.
+
 ## Compatibility with Sourcegraph
 
 The **major** and **minor** versions both need to match the Sourcegraph version the executors are talking to. Patch version **don't** need to match and it's generally advised to use the latest available.

@@ -1,7 +1,6 @@
 module "executors" {
-  source  = "sourcegraph/executors/google"
-  version = "7.3.0" # LATEST
-
+  source                                       = "sourcegraph/executors/google"
+  version                                      = "7.7.0" # LATEST
   region                                       = local.region
   zone                                         = local.zone
   executor_instance_tag                        = "codeintel-prod"

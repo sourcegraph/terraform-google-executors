@@ -1,14 +1,12 @@
 module "networking" {
   source  = "sourcegraph/executors/google//modules/networking"
-  version = "7.3.0" # LATEST
-
-  region = local.region
+  version = "7.7.0" # LATEST
+  region  = local.region
 }
 
 module "docker-mirror" {
-  source  = "sourcegraph/executors/google//modules/docker-mirror"
-  version = "7.3.0" # LATEST
-
+  source              = "sourcegraph/executors/google//modules/docker-mirror"
+  version             = "7.7.0" # LATEST
   zone                = local.zone
   network_id          = module.networking.network_id
   subnet_id           = module.networking.subnet_id
@@ -16,9 +14,8 @@ module "docker-mirror" {
 }
 
 module "executors-codeintel" {
-  source  = "sourcegraph/executors/google//modules/executors"
-  version = "7.3.0" # LATEST
-
+  source                              = "sourcegraph/executors/google//modules/executors"
+  version                             = "7.7.0" # LATEST
   zone                                = local.zone
   network_id                          = module.networking.network_id
   subnet_id                           = module.networking.subnet_id
@@ -34,9 +31,8 @@ module "executors-codeintel" {
 }
 
 module "executors-batches" {
-  source  = "sourcegraph/executors/google//modules/executors"
-  version = "7.3.0" # LATEST
-
+  source                              = "sourcegraph/executors/google//modules/executors"
+  version                             = "7.7.0" # LATEST
   zone                                = local.zone
   network_id                          = module.networking.network_id
   subnet_id                           = module.networking.subnet_id

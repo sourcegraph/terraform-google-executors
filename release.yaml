@@ -27,7 +27,7 @@ internal:
               comby 'github.com/sourcegraph/terraform-google-executors/blob/v:[version~\d+\.\d+\.\d+]' 'github.com/sourcegraph/terraform-google-executors/blob/v{{tag}}' -i -f .md
           - name: "files(tf)"
             cmd: |
-              comby 'version = ":[version~\d+\.\d+\.\d+]" # LATEST' 'version = "{{tag}}" # LATEST' -i -f .tf
+              comby 'version = ":[version~\d+\.\d+\.\d+]" # LATEST' 'version = "{{tag}}" # LATEST' -matcher .txt -i -f .tf
           - name: "family(name):docker-mirror"
             cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' "\"sourcegraph-executors-docker-mirror-$(cat family_tag)\"" -i -f .tf
           - name: "family(name):sourcegraph-executors"
@@ -95,7 +95,7 @@ internal:
               comby 'github.com/sourcegraph/terraform-google-executors/blob/v:[version~\d+\.\d+\.\d+]' 'github.com/sourcegraph/terraform-google-executors/blob/v{{tag}}' -i -f .md
           - name: "files(tf)"
             cmd: |
-              comby 'version = ":[version~\d+\.\d+\.\d+]" # LATEST' 'version = "{{tag}}" # LATEST' -i -f .tf
+              comby 'version = ":[version~\d+\.\d+\.\d+]" # LATEST' 'version = "{{tag}}" # LATEST' -matcher .txt -i -f .tf
           - name: "family(name):docker-mirror"
             cmd: comby '"sourcegraph-executors-docker-mirror-:[~\d+-\d+]"' "\"sourcegraph-executors-docker-mirror-$(cat family_tag)\"" -i -f .tf
           - name: "family(name):sourcegraph-executors"

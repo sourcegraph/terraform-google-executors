@@ -27,36 +27,38 @@ module "gcp-docker-mirror" {
 module "gcp-executors" {
   source = "./modules/executors"
 
-  randomize_resource_names                 = var.randomize_resource_names
-  zone                                     = var.zone
-  network_id                               = module.gcp-networking.network_id
-  subnet_id                                = module.gcp-networking.subnet_id
-  resource_prefix                          = var.executor_resource_prefix
-  machine_image                            = var.executor_machine_image
-  machine_type                             = var.executor_machine_type
-  boot_disk_size                           = var.executor_boot_disk_size
-  preemptible_machines                     = var.executor_preemptible_machines
-  instance_tag                             = var.executor_instance_tag
-  sourcegraph_external_url                 = var.executor_sourcegraph_external_url
-  sourcegraph_executor_proxy_password      = var.executor_sourcegraph_executor_proxy_password
-  queue_name                               = var.executor_queue_name
-  queue_names                              = var.executor_queue_names
-  use_firecracker                          = var.executor_use_firecracker
-  maximum_runtime_per_job                  = var.executor_maximum_runtime_per_job
-  maximum_num_jobs                         = var.executor_maximum_num_jobs
-  num_total_jobs                           = var.executor_num_total_jobs
-  max_active_time                          = var.executor_max_active_time
-  job_num_cpus                             = var.executor_job_num_cpus != "" ? var.executor_job_num_cpus : var.executor_firecracker_num_cpus
-  job_memory                               = var.executor_job_memory != "" ? var.executor_job_memory : var.executor_firecracker_memory
-  firecracker_disk_space                   = var.executor_firecracker_disk_space
-  min_replicas                             = var.executor_min_replicas
-  max_replicas                             = var.executor_max_replicas
-  jobs_per_instance_scaling                = var.executor_jobs_per_instance_scaling
-  metrics_environment_label                = var.executor_metrics_environment_label
-  docker_registry_mirror                   = "http://${module.gcp-docker-mirror.ip_address}:5000"
-  docker_registry_mirror_node_exporter_url = "http://${module.gcp-docker-mirror.ip_address}:9999"
-  assign_public_ip                         = var.private_networking ? false : true
-  docker_auth_config                       = var.executor_docker_auth_config
-  use_local_ssd                            = var.executor_use_local_ssd
-  private_ca_cert_path                     = var.private_ca_cert_path
+  randomize_resource_names                       = var.randomize_resource_names
+  zone                                           = var.zone
+  network_id                                     = module.gcp-networking.network_id
+  subnet_id                                      = module.gcp-networking.subnet_id
+  resource_prefix                                = var.executor_resource_prefix
+  machine_image                                  = var.executor_machine_image
+  machine_type                                   = var.executor_machine_type
+  boot_disk_size                                 = var.executor_boot_disk_size
+  preemptible_machines                           = var.executor_preemptible_machines
+  instance_tag                                   = var.executor_instance_tag
+  sourcegraph_external_url                       = var.executor_sourcegraph_external_url
+  sourcegraph_executor_proxy_password            = var.executor_sourcegraph_executor_proxy_password
+  sourcegraph_executor_proxy_password_secret     = var.executor_sourcegraph_executor_proxy_password_secret
+  sourcegraph_executor_proxy_password_secret_key = var.executor_sourcegraph_executor_proxy_password_secret_key
+  queue_name                                     = var.executor_queue_name
+  queue_names                                    = var.executor_queue_names
+  use_firecracker                                = var.executor_use_firecracker
+  maximum_runtime_per_job                        = var.executor_maximum_runtime_per_job
+  maximum_num_jobs                               = var.executor_maximum_num_jobs
+  num_total_jobs                                 = var.executor_num_total_jobs
+  max_active_time                                = var.executor_max_active_time
+  job_num_cpus                                   = var.executor_job_num_cpus != "" ? var.executor_job_num_cpus : var.executor_firecracker_num_cpus
+  job_memory                                     = var.executor_job_memory != "" ? var.executor_job_memory : var.executor_firecracker_memory
+  firecracker_disk_space                         = var.executor_firecracker_disk_space
+  min_replicas                                   = var.executor_min_replicas
+  max_replicas                                   = var.executor_max_replicas
+  jobs_per_instance_scaling                      = var.executor_jobs_per_instance_scaling
+  metrics_environment_label                      = var.executor_metrics_environment_label
+  docker_registry_mirror                         = "http://${module.gcp-docker-mirror.ip_address}:5000"
+  docker_registry_mirror_node_exporter_url       = "http://${module.gcp-docker-mirror.ip_address}:9999"
+  assign_public_ip                               = var.private_networking ? false : true
+  docker_auth_config                             = var.executor_docker_auth_config
+  use_local_ssd                                  = var.executor_use_local_ssd
+  private_ca_cert_path                           = var.private_ca_cert_path
 }

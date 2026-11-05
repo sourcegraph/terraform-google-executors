@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-set -euxo pipefail
+set -euo pipefail
 
-## Pull terraform variables into the environment.
+## Pull terraform variables into the environment. Tracing starts after this
+## block so secrets passed inline don't land in the serial console.
 %{ for key, value in environment_variables }
 ${key}="${replace(value, "\"", "\\\\\\\"")}"
 %{ endfor ~}
+set -x
 
 # Conditionally set below
 DOCKER_REGISTRY_NODE_EXPORTER_URL_LINE=''
@@ -70,7 +72,9 @@ print(json.loads(payload)[key] if key else payload.rstrip("\n"))
   set -x
 fi
 
-# Write the systemd environment file used by the executor service
+# Write the systemd environment file used by the executor service. It holds
+# the proxy password and docker auth config, so only root may read it.
+install -m 600 /dev/null /etc/systemd/system/executor.env
 cat <<EOF >/etc/systemd/system/executor.env
 EXECUTOR_QUEUE_NAME="$${EXECUTOR_QUEUE_NAME}"
 EXECUTOR_QUEUE_NAMES="$${EXECUTOR_QUEUE_NAMES}"

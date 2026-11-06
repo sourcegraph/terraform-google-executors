@@ -52,21 +52,21 @@ fi
 
 # Read the proxy password from Secret Manager, authenticating as the VM's service
 # account. Tracing is off here so the password doesn't land in the serial console.
-if [ "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET}" != '' ]; then
+if [ "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}" != '' ]; then
   set +x
   ACCESS_TOKEN=$(curl -sSf --retry 5 -H 'Metadata-Flavor: Google' \
     'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token' \
     | python3 -c 'import json, sys; print(json.load(sys.stdin)["access_token"])')
   SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD=$(curl -sSf --retry 5 -H "Authorization: Bearer $${ACCESS_TOKEN}" \
-    "https://secretmanager.googleapis.com/v1/$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET}/versions/latest:access" \
+    "https://secretmanager.googleapis.com/v1/$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}/versions/latest:access" \
     | python3 -c '
 import base64, json, sys
 payload = base64.b64decode(json.load(sys.stdin)["payload"]["data"]).decode()
-key = sys.argv[1]
-print(json.loads(payload)[key] if key else payload.rstrip("\n"))
-' "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_KEY}")
+json_path = sys.argv[1]
+print(json.loads(payload)[json_path] if json_path else payload.rstrip("\n"))
+' "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_JSON_PATH}")
   if [ "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD}" = '' ]; then
-    echo "Secret $${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET} holds an empty executor proxy password" >&2
+    echo "Secret $${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME} holds an empty executor proxy password" >&2
     exit 1
   fi
   set -x

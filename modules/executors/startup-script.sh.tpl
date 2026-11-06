@@ -52,21 +52,29 @@ fi
 
 # Read the proxy password from Secret Manager, authenticating as the VM's service
 # account. Tracing is off here so the password doesn't land in the serial console.
+# Retried because a freshly granted IAM binding can take a minute to propagate.
 if [ "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}" != '' ]; then
   set +x
-  ACCESS_TOKEN=$(curl -sSf --retry 5 -H 'Metadata-Flavor: Google' \
-    'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token' \
-    | python3 -c 'import json, sys; print(json.load(sys.stdin)["access_token"])')
-  SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD=$(curl -sSf --retry 5 -H "Authorization: Bearer $${ACCESS_TOKEN}" \
-    "https://secretmanager.googleapis.com/v1/$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}/versions/latest:access" \
-    | python3 -c '
+  read_secret() {
+    local access_token
+    access_token=$(curl -sSf -H 'Metadata-Flavor: Google' \
+      'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token' \
+      | python3 -c 'import json, sys; print(json.load(sys.stdin)["access_token"])')
+    curl -sSf -H "Authorization: Bearer $${access_token}" \
+      "https://secretmanager.googleapis.com/v1/$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}/versions/latest:access" \
+      | python3 -c '
 import base64, json, sys
 payload = base64.b64decode(json.load(sys.stdin)["payload"]["data"]).decode()
 json_path = sys.argv[1]
 print(json.loads(payload)[json_path] if json_path else payload.rstrip("\n"))
-' "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_JSON_PATH}")
+' "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_JSON_PATH}"
+  }
+  for attempt in 1 2 3 4 5; do
+    SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD=$(read_secret) && break
+    sleep $((attempt * 5))
+  done
   if [ "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD}" = '' ]; then
-    echo "Secret $${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME} holds an empty executor proxy password" >&2
+    echo "Could not read a non-empty executor proxy password from $${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}" >&2
     exit 1
   fi
   set -x

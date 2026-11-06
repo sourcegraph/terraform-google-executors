@@ -166,6 +166,9 @@ resource "google_compute_instance_template" "executor-instance-template" {
     }
   })
 
+  # VMs read the secret at boot, so the IAM binding must exist before the first one starts.
+  depends_on = [google_secret_manager_secret_iam_member.service_account_iam_secret_accessor]
+
   lifecycle {
     create_before_destroy = true
 

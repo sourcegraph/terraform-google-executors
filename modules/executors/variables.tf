@@ -76,12 +76,6 @@ variable "sourcegraph_executor_proxy_password_secret_name" {
   description = "Resource name (`projects/<project>/secrets/<name>`) of a Google Secret Manager secret holding the executor proxy password. Executors read its latest version at boot, so the password never enters Terraform state or instance metadata. Either this or `sourcegraph_executor_proxy_password` is required. The name must be known at plan time (a literal or a data source lookup, not the `id` of a secret created in the same apply), because the IAM binding that grants access to it is conditional on it."
 }
 
-variable "sourcegraph_executor_proxy_password_secret_json_path" {
-  type        = string
-  default     = ""
-  description = "When set, the secret payload is a JSON object and this top-level key holds the password, e.g. `executors.accessToken` for a secret containing site configuration (the dot is part of the key, not a nested path). Leave empty when the payload is the password itself"
-}
-
 variable "queue_name" {
   type        = string
   default     = ""

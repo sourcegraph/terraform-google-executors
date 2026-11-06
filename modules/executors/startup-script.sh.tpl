@@ -62,12 +62,7 @@ if [ "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}" != '' ]; then
       | python3 -c 'import json, sys; print(json.load(sys.stdin)["access_token"])')
     curl -sSf -H "Authorization: Bearer $${access_token}" \
       "https://secretmanager.googleapis.com/v1/$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}/versions/latest:access" \
-      | python3 -c '
-import base64, json, sys
-payload = base64.b64decode(json.load(sys.stdin)["payload"]["data"]).decode()
-json_path = sys.argv[1]
-print(json.loads(payload)[json_path] if json_path else payload.rstrip("\n"))
-' "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_JSON_PATH}"
+      | python3 -c 'import base64, json, sys; print(base64.b64decode(json.load(sys.stdin)["payload"]["data"]).decode().rstrip("\n"))'
   }
   for attempt in 1 2 3 4 5; do
     SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD=$(read_secret) && break

@@ -15,5 +15,6 @@ Use `**BREAKING**:` to denote a breaking change
 ### Fixed
 
 - The executor startup script no longer traces `sourcegraph_executor_proxy_password` and `docker_auth_config` to the serial console, and writes `/etc/systemd/system/executor.env` with mode `0600`.
+- `sourcegraph_executor_proxy_password` and `docker_auth_config` may contain any character. The startup script single-quotes inline values so bash takes them literally, and escapes `\` and `"` when writing the systemd environment file. Previously a `$`, backtick, or `\` in the password broke the startup script (sourcegraph/terraform-aws-executors#60).
 
 - **BREAKING**: We refactored the terraform module to follow [best practices](https://cloud.google.com/docs/terraform/best-practices-for-terraform). It is recommended to re-create all resources.

@@ -16,7 +16,7 @@ variable "subnet_id" {
 variable "machine_image" {
   type        = string
   default     = ""
-  description = "Docker registry mirror node machine disk image to use for creating the boot volume. Leave empty to use latest compatible with the Sourcegraph version."
+  description = "Docker registry mirror node machine disk image to use for creating the boot volume. Leave empty to use the image built for the Sourcegraph version this module version was released with."
 }
 
 variable "machine_type" {

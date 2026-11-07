@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-set -euxo pipefail
+set -euo pipefail
 
-## Pull terraform variables into the environment.
+## Pull terraform variables into the environment. Tracing starts after this
+## block so secrets passed inline don't land in the serial console. Values are
+## single-quoted so bash takes them literally, whatever characters they hold.
 %{ for key, value in environment_variables }
-${key}="${replace(value, "\"", "\\\\\\\"")}"
+${key}='${replace(value, "'", "'\\''")}'
 %{ endfor ~}
+set -x
 
 # Conditionally set below
 DOCKER_REGISTRY_NODE_EXPORTER_URL_LINE=''
@@ -48,7 +51,43 @@ if [ "$${PRIVATE_CA_CERTIFICATE}" != '' ]; then
   echo "$${PRIVATE_CA_CERTIFICATE}" > /etc/ssl/certs/private_ca_cert.pem
 fi
 
-# Write the systemd environment file used by the executor service
+# Read the proxy password from Secret Manager, authenticating as the VM's service
+# account. Tracing is off here so the password doesn't land in the serial console.
+# Retried because a freshly granted IAM binding can take a minute to propagate.
+if [ "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}" != '' ]; then
+  set +x
+  read_secret() {
+    local access_token
+    access_token=$(curl -sSf -H 'Metadata-Flavor: Google' \
+      'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token' \
+      | python3 -c 'import json, sys; print(json.load(sys.stdin)["access_token"])')
+    curl -sSf -H "Authorization: Bearer $${access_token}" \
+      "https://secretmanager.googleapis.com/v1/$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}/versions/latest:access" \
+      | python3 -c 'import base64, json, sys; print(base64.b64decode(json.load(sys.stdin)["payload"]["data"]).decode().rstrip("\n"))'
+  }
+  for attempt in 1 2 3 4 5; do
+    SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD=$(read_secret) && break
+    sleep $((attempt * 5))
+  done
+  if [ "$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD}" = '' ]; then
+    echo "Could not read a non-empty executor proxy password from $${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME}" >&2
+    exit 1
+  fi
+  set -x
+fi
+
+# Write the systemd environment file used by the executor service. It holds
+# the proxy password and docker auth config, so only root may read it.
+# Inside the double quotes below, systemd treats only backslash and double
+# quote specially, so escape those two in the values that may contain them.
+# Tracing is off here so the password doesn't land in the serial console.
+set +x
+SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD=$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD//\\/\\\\}
+SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD=$${SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD//\"/\\\"}
+EXECUTOR_DOCKER_AUTH_CONFIG=$${EXECUTOR_DOCKER_AUTH_CONFIG//\\/\\\\}
+EXECUTOR_DOCKER_AUTH_CONFIG=$${EXECUTOR_DOCKER_AUTH_CONFIG//\"/\\\"}
+set -x
+install -m 600 /dev/null /etc/systemd/system/executor.env
 cat <<EOF >/etc/systemd/system/executor.env
 EXECUTOR_QUEUE_NAME="$${EXECUTOR_QUEUE_NAME}"
 EXECUTOR_QUEUE_NAMES="$${EXECUTOR_QUEUE_NAMES}"

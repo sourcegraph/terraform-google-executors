@@ -23,7 +23,8 @@ The [single-executor example](https://github.com/sourcegraph/terraform-google-ex
 
 - [Terraform](https://www.terraform.io/)
   - 4.1.x and below: `~> 1.1.x`
-  - 4.2.x and above: `>= 1.1.0, < 2.0.0`
+  - 4.2.x to 8.1.x: `>= 1.1.0, < 2.0.0`
+  - 8.2.x and above: `>= 1.2.0, < 2.0.0`
 - [hashicorp/google](https://registry.terraform.io/providers/hashicorp/google)
   - `>= 5.0, < 9.0`
 

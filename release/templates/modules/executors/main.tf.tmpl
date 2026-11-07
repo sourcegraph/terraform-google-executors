@@ -64,6 +64,14 @@ resource "google_project_iam_member" "service_account_iam_metric_writer" {
   project = data.google_project.project.id
 }
 
+# Lets the executor VM read the proxy password from Secret Manager at boot.
+resource "google_secret_manager_secret_iam_member" "service_account_iam_secret_accessor" {
+  count     = var.sourcegraph_executor_proxy_password_secret_name != "" ? 1 : 0
+  secret_id = var.sourcegraph_executor_proxy_password_secret_name
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.sa.email}"
+}
+
 data "google_compute_image" "executor_image" {
   count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
@@ -90,13 +98,18 @@ resource "google_compute_instance_template" "executor-instance-template" {
     preemptible       = var.preemptible_machines
   }
 
-  # Grant access to logging and monitoring APIs.
+  # Grant access to logging and monitoring APIs, and to Secret Manager when the
+  # proxy password is read from a secret. Secret Manager has no narrower scope than
+  # cloud-platform; IAM limits the service account to the one secret.
   service_account {
     email = google_service_account.sa.email
-    scopes = [
-      "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring.write",
-    ]
+    scopes = concat(
+      [
+        "https://www.googleapis.com/auth/logging.write",
+        "https://www.googleapis.com/auth/monitoring.write",
+      ],
+      var.sourcegraph_executor_proxy_password_secret_name != "" ? ["https://www.googleapis.com/auth/cloud-platform"] : [],
+    )
   }
 
   disk {
@@ -131,28 +144,37 @@ resource "google_compute_instance_template" "executor-instance-template" {
 
   metadata_startup_script = templatefile("${path.module}/startup-script.sh.tpl", {
     environment_variables = {
-      "EXECUTOR_DOCKER_REGISTRY_MIRROR"     = var.docker_registry_mirror
-      "DOCKER_REGISTRY_NODE_EXPORTER_URL"   = var.docker_registry_mirror_node_exporter_url
-      "SOURCEGRAPH_EXTERNAL_URL"            = var.sourcegraph_external_url
-      "SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD" = var.sourcegraph_executor_proxy_password
-      "EXECUTOR_MAXIMUM_NUM_JOBS"           = var.maximum_num_jobs
-      "EXECUTOR_JOB_NUM_CPUS"               = var.job_num_cpus != "" ? var.job_num_cpus : var.firecracker_num_cpus
-      "EXECUTOR_JOB_MEMORY"                 = var.job_memory != "" ? var.job_memory : var.firecracker_memory
-      "EXECUTOR_FIRECRACKER_DISK_SPACE"     = var.firecracker_disk_space
-      "EXECUTOR_QUEUE_NAME"                 = var.queue_name
-      "EXECUTOR_QUEUE_NAMES"                = local.queue_names
-      "EXECUTOR_MAXIMUM_RUNTIME_PER_JOB"    = var.maximum_runtime_per_job
-      "EXECUTOR_NUM_TOTAL_JOBS"             = var.num_total_jobs
-      "EXECUTOR_MAX_ACTIVE_TIME"            = var.max_active_time
-      "EXECUTOR_USE_FIRECRACKER"            = var.use_firecracker
-      "EXECUTOR_DOCKER_AUTH_CONFIG"         = var.docker_auth_config
-      "USE_LOCAL_SSD"                       = var.use_local_ssd
-      "PRIVATE_CA_CERTIFICATE"              = var.private_ca_cert_path != "" ? file(var.private_ca_cert_path) : ""
+      "EXECUTOR_DOCKER_REGISTRY_MIRROR"                 = var.docker_registry_mirror
+      "DOCKER_REGISTRY_NODE_EXPORTER_URL"               = var.docker_registry_mirror_node_exporter_url
+      "SOURCEGRAPH_EXTERNAL_URL"                        = var.sourcegraph_external_url
+      "SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD"             = var.sourcegraph_executor_proxy_password
+      "SOURCEGRAPH_EXECUTOR_PROXY_PASSWORD_SECRET_NAME" = var.sourcegraph_executor_proxy_password_secret_name
+      "EXECUTOR_MAXIMUM_NUM_JOBS"                       = var.maximum_num_jobs
+      "EXECUTOR_JOB_NUM_CPUS"                           = var.job_num_cpus != "" ? var.job_num_cpus : var.firecracker_num_cpus
+      "EXECUTOR_JOB_MEMORY"                             = var.job_memory != "" ? var.job_memory : var.firecracker_memory
+      "EXECUTOR_FIRECRACKER_DISK_SPACE"                 = var.firecracker_disk_space
+      "EXECUTOR_QUEUE_NAME"                             = var.queue_name
+      "EXECUTOR_QUEUE_NAMES"                            = local.queue_names
+      "EXECUTOR_MAXIMUM_RUNTIME_PER_JOB"                = var.maximum_runtime_per_job
+      "EXECUTOR_NUM_TOTAL_JOBS"                         = var.num_total_jobs
+      "EXECUTOR_MAX_ACTIVE_TIME"                        = var.max_active_time
+      "EXECUTOR_USE_FIRECRACKER"                        = var.use_firecracker
+      "EXECUTOR_DOCKER_AUTH_CONFIG"                     = var.docker_auth_config
+      "USE_LOCAL_SSD"                                   = var.use_local_ssd
+      "PRIVATE_CA_CERTIFICATE"                          = var.private_ca_cert_path != "" ? file(var.private_ca_cert_path) : ""
     }
   })
 
+  # VMs read the secret at boot, so the IAM binding must exist before the first one starts.
+  depends_on = [google_secret_manager_secret_iam_member.service_account_iam_secret_accessor]
+
   lifecycle {
     create_before_destroy = true
+
+    precondition {
+      condition     = (var.sourcegraph_executor_proxy_password != "") != (var.sourcegraph_executor_proxy_password_secret_name != "")
+      error_message = "Set exactly one of sourcegraph_executor_proxy_password or sourcegraph_executor_proxy_password_secret_name."
+    }
   }
 }
 

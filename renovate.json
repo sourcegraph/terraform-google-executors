@@ -1,0 +1,16 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>sourcegraph/renovate-config"],
+  "packageRules": [
+    {
+      "description": "This is a published module: keep provider and Terraform version ranges open for consumers, and only widen the upper bound when a release lands outside the range",
+      "matchManagers": ["terraform"],
+      "rangeStrategy": "widen"
+    },
+    {
+      "description": "examples/ pin this module's own registry version; sg release renders them from release/templates, so Renovate must not bump them",
+      "matchDatasources": ["terraform-module"],
+      "enabled": false
+    }
+  ]
+}

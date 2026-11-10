@@ -21,6 +21,10 @@ The [single-executor example](https://github.com/sourcegraph/terraform-google-ex
 
 ## Requirements
 
+Executor host images require **systemd 250 or later**, `udevadm`, and `ethtool`. Ubuntu 24.04 satisfies the systemd requirement; Ubuntu 22.04 with systemd 249 does not. The startup script checks the systemd version before starting the executor.
+
+The startup script disables hardware GRO on GVE network interfaces. It writes `GenericReceiveOffloadHardware=no` to drop-ins for the host's systemd `.link` files, including netplan-generated files and applies the setting immediately for the first boot. Software GRO remains unchanged. This prevents hardware-coalesced packets from reaching a Firecracker guest that cannot segment them.
+
 - [Terraform](https://www.terraform.io/)
   - 4.1.x and below: `~> 1.1.x`
   - 4.2.x to 8.1.x: `>= 1.1.0, < 2.0.0`

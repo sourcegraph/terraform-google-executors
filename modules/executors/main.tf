@@ -75,7 +75,7 @@ resource "google_secret_manager_secret_iam_member" "service_account_iam_secret_a
 data "google_compute_image" "executor_image" {
   count   = var.machine_image != "" ? 0 : 1
   project = "sourcegraph-ci"
-  family  = "sourcegraph-executors-7-3"
+  name    = "sourcegraph-executors-7-3-0"
 }
 
 resource "random_id" "compute_instance_network_tag" {
